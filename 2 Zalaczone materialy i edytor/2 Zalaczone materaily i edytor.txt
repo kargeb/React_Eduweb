@@ -1,4 +1,4 @@
-/*	3	ZAŁACZONE MATERIAŁY I EDYTOR
+/*	2	ZAŁACZONE MATERIAŁY I EDYTOR
 
 	Mozesz kozystac z dowolnego edytora ale skonfiguruj go tak samo jak ten chlop
 	

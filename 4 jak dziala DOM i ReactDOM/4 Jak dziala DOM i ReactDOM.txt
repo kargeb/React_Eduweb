@@ -1,13 +1,8 @@
-/* 5 jak dziala DOM i ReactDOM
+/* 4 jak dziala DOM i ReactDOM
 
 	Jest to dosc niskopoziomowy poziom Reacta ale chce zebys doglebnie wszystko poznal jak dziala, zebys wiedzial
 	co sie dzieje pod maska Recta
 	
 	PRZYPOMINAMY TERAZ JAK SIE TO ROBI W ZWYKLYM JS czyli standardowe modyfikowanie DOM
 	Dowiemy sie pozniej wlasnie jakie sa roznice miedzy jednym a drugim
-	
-	
-	
-	
-	
 */

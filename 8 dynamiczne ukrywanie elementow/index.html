@@ -1,0 +1,136 @@
+<!-- 8 -- Dynamiczne ukrywanie elementow -->
+
+<!-- CZasami poza zmianą treści chcesz ją także pokazać badz ukryc, w zaleznosci od tego
+    jakie dane zostaną przekazane. Np u nas niektóre z danych mają takie pola:
+    "is_new": true,  "is_promo": true,  lub nie mają żadnego z nich,
+    np i wlasnie na tej podstawie chcemy pokazywac i ukrywac na stornie pewne rzeczy -->
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" 
+    integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">   
+
+    <!-- *********************************************    WAŻNE !!!  ********************************************* -->
+    <!-- React.DOM.div  ->  ReactDOMFactories.div -->
+    <!-- ----------- REACT 16 ------------ -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/react-dom-factories@1.0.0/index.js"></script>
+
+    <!-- ----------- REACT 15 ------------ -->
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script> -->
+    <!-- ********************************************************************************************************* --> 
+    
+    <style>
+        .course{
+            padding: 10px;
+            border: 1px solid #e8e8e8;
+        }
+    </style>
+    
+    <title>Lesson 8</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1>Lekcja  8 -- Dynamiczne ukrywanie elementow</h1>
+
+                <div id="root">
+                </div>
+
+                <button class="btn btn-default" id="grow"> + </button>
+                <button class="btn btn-default" id="shrink"> - </button>
+                <button class="btn btn-default" id="prev">Prev</button>
+                <button class="btn btn-default" id="next">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="courses_data.js"></script> 
+    <script>
+        var div = ReactDOMFactories.div;  // ZGODNE Z WERSJA REACT nr 16 !
+
+        var font_size = 3;
+
+        var index = 0;                   
+        var data = courses_data[index];
+
+        var course = function(data) {   
+            // << 3 >>
+            var isPromo = data.is_promo ? React.createElement('p',{ style:{ fontSize: (font_size/2) + 'em', fontWeight:'bolder' }}, 'Promocja!' ) : null;
+
+            return div({id:'kurs', className:'media course'},
+                        div({className:'media-left'},                                        
+                            React.createElement('img', {className:'media-object', alt:'Miniatura Kursu', src: data.image })
+                        ),
+                        div({className:'media-body'},                                                             
+                            React.createElement('h3',{className:'media-heading', style:{ fontSize: font_size + 'em' }}, data.title ), 
+                            React.createElement('p',{ style:{ fontSize: (font_size/2) + 'em' } }, data.description ),
+                            // React.createElement('p',{ style:{ fontSize: (font_size/2) + 'em', fontWeight:'bolder' }}, 'Nowość!' ),   // << 1 >>
+                            // React.createElement('p',{ style:{ fontSize: (font_size/2) + 'em', fontWeight:'bolder' }}, 'Promocja!' )  
+                            data.is_new ? React.createElement('p',{ style:{ fontSize: (font_size/2) + 'em', fontWeight:'bolder' }}, 'Nowość!' ) : null,   // << 2 >>
+                            // data.is_promo ? React.createElement('p',{ style:{ fontSize: (font_size/2) + 'em', fontWeight:'bolder' }}, 'Promocja!' ) : null  
+                            isPromo     // << 3 >> zamiast drugiego << 2 >>
+                        )
+                );      
+        }
+
+        document.getElementById("grow").addEventListener("click", function(){ 
+            font_size = font_size + 1;
+            render();
+        })
+
+        document.getElementById("shrink").addEventListener("click", function(){
+            font_size = font_size === 1 ? font_size : (font_size - 1 );
+            render();
+        })
+
+        document.getElementById("next").addEventListener("click", function(){ 
+            index = index + 1;
+            render();
+        })
+
+        document.getElementById("prev").addEventListener("click", function(){
+            index = index === 0 ? 0 : ( index - 1 );
+            render();
+        })
+
+        function render(){
+            data = courses_data[index];
+            ReactDOM.render(course(data), document.getElementById('root')); 
+        }
+        
+        render();
+
+/*
+    << 1 >> Zaczynamy od dodania dwuch nowych paragrafow na podstawie tego powyzej, bogrubiamy tez w nich czcionke - OK
+    << 2 >> skoto wiemy jak juz wyswietlic to robimy funkcjonlanosc UKRYWANIA I POKAZYWANIA w zaleznosci od danych z bazy
+            data.is_new ? React.createElement('p' ... 'Nowość!' ) : null,
+            Zajebiste ! Znowu ta konstrukcja, najzwyczajniejsze w świecie sprawdzenie i jeśli nie ma to po prostu null, MEGA
+    << 3 >> (x2) Wszystko już dziala, ale popatrz CO MOZNA ROBIC ! Mozesz sobie np w innym miejscu zorbic taki skład poszczególnych warunków
+            a później tylko poprzypisywać je do zmiennych i robić sobie takie zajebiste kompaktowe formularze ! 
+            UWAGA ! Oczywiście wszystko musisz umieszczac w fukncji którą przekazujesz do renderowania         
+
+    Podsumowanie pierwszych lekcji, wiesz jak:
+        - wyswietlac elementy,
+        - budowac strukture,
+        - jak zmieniac dynamicznie treść 
+        - i jak dynamicznie pokazywac i ukrywac elementy
+        
+    Przed nami jak zrobić to wszystko jeszcze bardziej dynamicznie czyli np wyswietlic kilka elementow na raz i podmienic dynamicznie cala liste elementow     
+    
+*/
+    </script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-/*	4	KONFIGURACJA SERVERA
+﻿/*	3	KONFIGURACJA SERVERA
 
 	Instalujemy i konfigurujemy serwer statycznych plikow, nie trzeba go juz ale lepiej miec to z glowy
 	

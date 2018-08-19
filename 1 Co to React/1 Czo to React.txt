@@ -1,4 +1,4 @@
-/*	1 i 2	Co to jest React
+﻿/*	1 Co to jest React
 
 	bedzie babel i beda elementy ES6, webpack i super szybki server developerski (ciekawe czy ten co juz znam)
 
