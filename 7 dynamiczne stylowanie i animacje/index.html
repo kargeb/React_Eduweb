@@ -49,6 +49,12 @@
                 <div id="root">
 
                 </div>
+
+            <!-- Dodajemy 2 button to manipulowania wielkościa czcionki     -->
+                <button class="btn btn-default" id="grow"> + </button>
+                <button class="btn btn-default" id="shrink"> - </button>
+                <button class="btn btn-default" id="start">Start</button>
+                <button class="btn btn-default" id="stop">Stop</button>
             </div>
         </div>
     </div>
@@ -56,18 +62,113 @@
     <script>
 
         var div = ReactDOMFactories.div;    // ZGODNE Z WERSJA REACT nr 16 !
+        var font_size = 3;
+        var progress = 20;
 
-        var course = div({id:'kurs', className:'media course'},
+        // TUTAJ NASTĘPUJE BARDZO WAŻNA ZMIANA WZGLĘDEM POPRZEDNIEJ LEKCJI ! (opakowanie w funkcje)
+        // OPIS NA DOLE, NAD TAGIEM /script %%%%%
+        var course = function() {
+            return div({id:'kurs', className:'media course'},
                         div({className:'media-left'},
                             React.createElement('img', {className:'media-object', alt:'Miniatura Kursu', src:'http://placekitten.com/200/200'})
                         ),
-                        div({className:'media-body'},
-                            React.createElement('h3',{className:'media-heading'},'Kurs React'), 
-                            React.createElement('p',{},'React od podstaw')
+                        div({className:'media-body'},           // OPIS DODAWANIA STYLI POD SPODEM *****
+                            React.createElement('h3',{className:'media-heading', style:{ fontSize: font_size + 'em' }},'Kurs React'), // OK
+                            React.createElement('p',{ style:{ fontSize: (font_size/2) + 'em' } },'React od podstaw'),
+                            // ^^^^^ DALY CIĄG - pasek postępu
+                            "Ładowanie ...",    // MOŻNA DODAĆ SAM STRING, nie muszą to być elementy
+                            div({ className:'progress' },   // Uwaga, dodanie jednej klasy "active" sprawia ze ten pasek sie rusza
+                                 div( { className: 'progress-bar progress-bar-success progress-bar-striped active', style:{width: progress + '%'} }), progress + "%")
                         )
                 );      
+        }
 
-        ReactDOM.render(course, document.getElementById('root')); 
+        // ***** OPIS DODAWANIA STYLI:
+        // Chcemy sobie ostylowac nasz heading no i UWAGA nie mozna zrobic tego tak bo bedzie błąd: style:'font-size:3em'
+        // Musimy wstawic to jako swego rodziaju obiekt, ale dzieki temu mozemy sobie swietnie pomoc zmiennymi: 
+        // Zwroc uwage ze pierwsze fontSize JEST JAKO CAMELCASE !  
+        // drugie font_size to jest nasza wlasna zmienna, moglibysmy oczywiscie wpisac tez zwykla liczbe 
+        // więc nagłowek h3 robimy taka wielkoscia jaka jest pod zmienna font_size
+        // a pod spodem, p, robimy dokładnie połową z tej zmiennej            
+
+
+        // Przyciski do obsługi buttonow
+        document.getElementById("grow").addEventListener("click", function(){ 
+            font_size = font_size + 1;
+            render();
+        })
+
+        document.getElementById("shrink").addEventListener("click", function(){
+            font_size = font_size === 1 ? font_size : (font_size - 1 );
+            render();
+        })
+        
+        var interval; 
+        document.getElementById("start").addEventListener("click", function(){ 
+            interval = setInterval( function(){
+                progress = progress + 1;
+                render();
+            }, 300);
+        })
+
+        document.getElementById("stop").addEventListener("click", function(){
+            clearInterval(interval);
+            render();
+        })
+
+        // UWAGA funckja render powstala po to abysmy mogli W DOWOLONYM momencie wywołać ponowne przerenderowanie Reacta
+        // zaraz pod nią jest jej pierwsze wywołanie po to zeby pokazała nam sie strona,
+        // a poźniej wywoływana ona jest W KAŻDEJ FUNKCJI EVENTLISTENERA po kliknięciu w przycisk ! 
+        // @@@@@ Bardzo wazna zmiana:
+        function render(){
+            ReactDOM.render(course(), document.getElementById('root')); 
+        }
+        // UWAGA ! TUTAJ TEZ BARDZO WAZNA ZMIANA PO ZMIANIE course W FUNKCJE
+        // W naszym renderze nie przekazujemy zmiennej TYLKO FUNCKJE !
+        // STARE:   ReactDOM.render(course, ....
+        // NOWE:     ReactDOM.render(course(), ....
+
+        
+        render();
+
+    // %%%%% OPIS BARDZO WAZNEJ ZMIANY
+    // OPAKOWANIE zmiennej course W FUNKCJE
+    // Gdy do naszej zmiennej course zostają poprostu zapisane wszystkie nasze elementy z createElement, 
+    // TO ONE ZOSTAJA TAM ZAPISANE RAZ A DOBRZE, i mimo ze nasz font_size zmienia sie za kazdym klikiem przyciusku
+    // to tamten pierwszy rozmiar caly czas siedzi zapamietany w course i nic nie daje 1000 renderowan nawet
+
+    // aby wszystko co robimy w tej lekcji pięknie zadziałało, nasze suche zapakowanie danych do zmiennej course
+    // nasza zmienna nie bedzie przechowywac samego kontenera div ALE PRZYPISZEMY DO NIEJ FUNKCJE
+    // KTORA W RETURNIE BEDZIE ZA KAZDYM RAZYM TWORZYC TE ELEMENTY NA NOWO
+
+    // STARE :
+    // var course = div({id:'kurs', className:'media course'},
+    //         ....
+
+    // NOWE:
+    // var course = function() {
+    //         return div({id:'kurs', className:'media course'},
+    //         .... }
+
+    // UWAGA Po tej zmianie musimy jeszcze BARDZO WAZNA RZECZ ZMIENIC W FUNKCJI RENDER 
+    // czyli również zmienną zamieniń na funkcję @@@@@ 
+    // Wszystko działa !
+    // CO JEST BARDZO ISTOTNE !!!
+    // Mimo ze za kazdym renderem przekazujemy jak gdyby nową funkcję która tworzy cały widok
+    // TO DZIĘKI TEMU ZE TO JEST REACT TO NA NOWĄ RENDERUJĄ SIĘ WYŁACZNIE TE ELEMENTY KTÓRE
+    // FAKTYCZNIE SIĘ ZMIENIŁY !!! Cała reszta zostaje jaka była
+    // Doskonale widać do w devToolsach w przeglądarce, gdzie składnia podczas zmiany koloruję się
+    // faktycznie wyłacznie na elementach aktulanie powiększanych i zmniejszanych
+    // Tak więc React znajduje ABSOLUTNE MINIMUM które trzeba zmieniń - dlatego jest tak zajebiście szybki 
+
+    // DALSZY CIĄG LEKCJI - ^^^^^^ - dodajemy progress bar bootstrapowy
+    // Dodajemy diva progress, w ktorym tworzymy diva juz idelnie przekopiowanego z bootstrapa
+    // w tym elemencie paska WIDTH to jest faktyczne jego zapełnienie, tworzymy tam dodatkową zmienną progress która będzię animowana
+    // a drugie wystąpienie tej zmiennej to jestr po prostu to co jest na tym pasku napisane
+    // widać jak zajebiście łatwo można dodawać te nowe elementy ale składnia na ten moment pojebana fest, trzeba przywyknąć
+    // Dodajemy 2 nowe buttony do sterowania paskiem i obsługę do nich
+
+
 
     </script>
 </body>
