@@ -1,0 +1,32 @@
+/*	3	ZAŁACZONE MATERIAŁY I EDYTOR
+
+	Mozesz kozystac z dowolnego edytora ale skonfiguruj go tak samo jak ten chlop
+	
+	On korzysta z Sublime Text
+	
+	Dodaje Package Control ale VSC tego chyba nie potrzebuje bo juz ma wbudowany EXTENSIONS
+	
+	Instalujemu Babel ale taki ze wsparciem dla ES6 i React JSC extensions - ZROBIONE
+	
+	Otwieramy caly folder szkoleniowy czyli React-pliki.
+	O i juz po konfiguracji :)
+	
+	Struktura folderow:
+	od 1 do 9 są to poszczególne lekcje i rodzialy a na końcu jest FInalna Aplikacja
+	Zeby uruchomic aplikacje trzeba miec NODE i WebPack
+	Pierwsze 6 sekcji to sam React bez wlasnie tych backendow i narzedzi
+	Dopiero od 7 wchodzi NODE i moduły
+	8 - Router umozliwia SinglePageAplication
+	9 - Flux i Redux to wymiana danych z serwerem - TO NIESJT OBOWIAZEK PRZY REATC ale musisz to znac przy finalnej aplikacji
+	
+	Nie zaczynaj od finalnej bo jest tam w chuj wszystkiego
+	
+	Ostania sekcja do Zasoby - to jest wszystko to co mozesz pobrac z neta ale on zalaczyl zeby bylo + przykladowe dane i miniatury
+	Np jakby sie obrazki nie chcialy ladowac z serwera EduWeb
+	
+	Każdą z lekcji mozesz odpalic w przegladarce ale pozniej pokaze jak korzystac z servera
+	
+	Mozna zaczac od sekcji 7 i skonfigurowac sobie od poczatku srodowisko ale nie szalej, ic od poczatku
+	
+	
+*/

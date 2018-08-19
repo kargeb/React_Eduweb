@@ -1,0 +1,51 @@
+/*	4	KONFIGURACJA SERVERA
+
+	Instalujemy i konfigurujemy serwer statycznych plikow, nie trzeba go juz ale lepiej miec to z glowy
+	
+	No to scigamy tego node js
+	sciagsz werje CURRENT
+	
+	Podczas instalacji w ciul wazna rzecza jest zeby mial zaznaczone add to PATH
+	czyli zeby wszystko bylo dostepne z wiersza polecen,  pozniej next next
+	Restartujesz kompa i sprawdzasz instalacje wpisujac
+		node --version	OK
+		npm --veriosn	OK
+		
+	teraz instalujemy Z FLAGA GLOBAL, dzieki temu bedziemy mogli odpalic to z dowolnego folderu na komputezre	
+	npm install --global http-server   OK
+	
+	teraz przechodzimy do dowolnego katalogu (dzieki --global)
+	(ja utworzylem folder "cwiczenia" w katalogu React)
+	i odpalamy komende  http-server
+	UWAGA robimy to z flaga -p 80  jesli chcesz zeby dzialalo przekeirwoanie w hosts !!
+	czyli  http-server -p 80
+	
+	pokazuja sie dresy na kotorych dostpeny jest nasz server 
+	http://127.0.0.1:8080	OK
+	
+	oczywiscie narazie nic tam nie ma
+	mozesz sobie dowolny plik wstawic HTMNLowy i wszystko bedzie zajebiscie
+	jak nazwiesz index.html to bedzie ladowany domyslnie
+	
+	tworzymy wiec index.html z podstawowym htmlem i wszystko gra	OK
+
+	O kuzwa jedziemy po bandzie czyli dolaczmy BOOTSTRAPA
+	w google wpisujesz bootsrap css
+	idziesz do Getting Started
+	i nie instaluejemy go tylko kopiujemy 2 PIERWSZE linijki w Bootsrao CDN, bez trzeciej JS
+	
+	Wklejasz to w HEAD i ma sie zmienic czcionka nagłowka   OK
+	
+	TERAZ TEZ SZAL, wykorzystamy plik HOSTS dzieki ktoremu dowolny jakis adres mozna przekierowac na kazdy inny
+	no i dzieki temu naszego bezplciowego localhosta przekierujemy juz na taki jak prawdziwa strona
+	
+	sciezka hosts  C:\Windows\System32\drivers\etc
+	otweiramy go jako administrator i wpisujemy:
+	
+	127.0.0.1:8080 kurs-react
+	
+	pozniej w przegladrake wpisujesz tylko  kurs-react/
+	kurwa nie dziala 
+	KURWA DZIALA ! 
+	tylko server trzeba uruchomic z flaga -p 80 !!!!!!!!!
+*/

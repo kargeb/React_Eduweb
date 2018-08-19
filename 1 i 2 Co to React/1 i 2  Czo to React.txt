@@ -1,0 +1,46 @@
+/*	1 i 2	Co to jest React
+
+	bedzie babel i beda elementy ES6, webpack i super szybki server developerski (ciekawe czy ten co juz znam)
+
+	kod bedziesz mogl wykorzystywac wiele wiele razy, w calkowicie roznych projektach, dzieki komponentom. 
+	Bedziesz je laczyc i budowac jak klocki
+
+	Czym jest React
+
+	Nie jest to kolejny framewrok JS (angulary itp), jest to tylko bilbioleta do dynamicznego interfejsu dla uzytkownika.
+	Glowne zadanie to renderwoanie interfejsu, za kazdym razem jak sie cos zmieni na stronie.
+	w MVC react to V - warstwa widoku
+	Główny element budowy aplikacji to Komponenty - zajebista rzecz bo architektura jest prosta, dzielisz aplikacje na bloki
+	i sobie je pozniej laczysz.
+	Komnponenty moga komunikowac sie ze soba przez poziomy komponentow lub Flux lub Redux - komponenty moga w ogole nie wiedziec
+	o swoim istnieniu, byle by docieraly do nich odpowniednie komunikaty, dzieki czemu mozesz komponenty dodawac lub usuwac, 
+	oczywiscie z glowa, a plikacja bedzie pieknie dalej chulac, mozesz je dodawac do calkowicie innych projektow itp
+
+	Komnponenty to sa pewnego rodzaju szablony tyle ze piszemy je w JS. Nie musisz sie uczyc nowych koncepcji i skladni.
+
+	Rect tworzy wirtualny dom ktory za kazdym razem przerenderowywuje storne, ale nie zabiera zasobow bo modyfikacje prawdziwego
+	DOMu bierze na siebie, ciebie to w ogole nie interesuje
+
+	Virtual - DOM lekka reprezentacja DOMu i to zajebiscie szybka
+	React to tworzenie reaktywnych aplikacji czyli naytchmiastowa reakcja na zdarzenia lub pobranie jakihs danych. 
+	React odswierza, przerenderowywyuje, usuwa i dodaje TYLKO TE ELEMENTY ktore akurat sie zmienily. W ciul przysipiesza do prace.
+
+	JSX, dzieki babelowi, mozesz pisac w czystym HTMLu, mozesz w klamerkach tylko wpierdzielic JS i bardzo szybko ten element zmienic
+
+	React daje wydajnosc i elastycznosc SINGLE PAGE APLICATION i wspaniale wspolpracuje z odswiezaniem danych.
+
+	Cale facebokk sklada sie z komponentow Reactowych.
+
+	Uwaga jesli chcesz cala palikacje single page aplikation to sam react nie wsytarczy ale on nauczy sie tez o narzedziach
+	dzieki ktorym to zrobisz !
+	Babel, WebPack, REact-Router, Fluxm Redux itp.
+	Mozesz tak naprwde zmienic koncjepcje polaczenia z baza danych w kazdej chwili wlasnie dzieki komponentom reacta.
+
+	React - przewidywalnosc, szybkosc, stabilnonsc
+
+	React jest wspanialym przykladem programowania funkcyjnego i deklaratywnego ! Bardzo wartosciowa wiedza, nieslychanie
+	przydatne koncepty.
+
+*/
+
+

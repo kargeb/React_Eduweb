@@ -1,0 +1,109 @@
+<!-- 5 -- DOM i ReactDOM -->
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" 
+    integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">   
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/16.4.2/cjs/react.development.js"></script> -->
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.4.2/cjs/react-dom.development.js"></script> -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1>Lekcja 5 DOM i ReactDOM</h1>
+
+                <!-- Tworzymy diva i na jego przykladzie porwnany sposoby jego modyfikacji -->
+                <div id="kurs">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Oto zwykla metoda pobierania elementu, trzeba sie orobic zeby cos do takiego elementu dodac
+        // trzeba stworzyc nowe obiekty i dopiero do nich dodwawac jaaks zawartosc 
+        var kurs = document.getElementById("kurs");
+        var header = document.createElement("h3");
+        header.innerText = "Kurs jQuery";
+        var desc = document.createElement("p");
+        desc.innerText = "Podstawy DOM z jQuery";
+        console.log(kurs, header, desc);
+        kurs.appendChild(header);
+        kurs.appendChild(desc);
+        // oto ile pracy trzeba sie narobic zeby takie elementy dodac z poziomu kodu,
+        // jest to fajny, poprawny, niskopozziomowy sposób ale widzisz jaki czasochlonny
+        
+        // Malo tego, jesli chcialbys zmodyfikowac ktorys z elementow to znowu: (zakladajac ze nie masz ich pobranych wczniesiej)
+        var kurs = document.getElementById("kurs");
+        kurs.children[0].innerText = "Kurs React";
+        kurs.children[1].innerText = "Kurs React od podstaw";
+        // Zauwaz gdzie jest problem, musiales dokladnie wiedziec co jest z children 0 i 1, a gdyby sie zmienila ich kolejnosc 
+        // lub doszedl jakis nowy element, no to problemu od razu
+        // Czyli ten sposob jest BARDZO DOKLADY ale przez to wlasnie bardzo latwo go spierdzielic
+        // Jednym ze sposobow na ulatwienie sobie zycia byla np jQuery, no ale tez nie do konca, poza tym juz po niej :P
+        // Kolejnym sposobem jest wykorzystanie szablonów czyli z palca wpisanie od razu wszystkiego prosto w element:
+        kurs.innerHTML = "<h3>Kurs Angular</h3><p>Angular od podstaw</p>";  // DZIALA
+        // Ta metoda mimo ze szybko i w miare czytelna tez ma duze wady, raz to wydjanosc no bo przegladarka
+        // za kazdym razem musi zniszczyc stare drzewo w "kurs" a pozniej utworzycz wszystko na nowo,
+        // nawet w przypadku gdy bedziesz zmienial tylko jeden znak!
+        // Po drugie oczywiscie niezwykle latwo sie pomylic no bo nie masz kolorowania skladni
+        // Angular korzsyta z tego podejscia ale znowu tam trzeba sie uczyc nowych skladni "ng..."
+        // Ogólnie wlasnie przy czyms takim mozna sobie pomagac albo jQuery albo Angluarem ale i jedno i drugie ma swoje wady
+
+        // No i teraz do gry wkracza React ! I uwaga, mimo ze to co zaraz zrobimuy moze wydawac sie wolniejsze od tego co wyzej
+        // to WCALE TAKIE NIE JEST, a czesto jest nawet szybsze niz Angular czy nawet jQuery
+        // INSTALACJA REACTA - na ten moment zrobimy podobnie jak z Bootstrapem, w HEADZIE strony
+        // uwaga on tych linkow nie pobral ze strony oficjalnej tylko wpisal w google 
+        // react cdn czyli content delivery network - i skorzystal z drugiego linku
+        // UWAGA ! Poza zalaczeniem bilbioteki React TRZEBA TEZ ZALACZYC DRUGA react-dom
+        // oczywiscie w filmie inna juz wersja i inne linki ktore nie dzialaja na jego stronie
+        // ale sciagnalem je z oficjalnej i wszystko gra zajebiście
+
+        // React stara sie jak gdyby laczyc poprzednie 2 sposoby
+        // wpisując komendę  React.createElement('h3',{},'Kurs jQuery')
+        // React tworzy WIRTUALNY ELEMENT ktory jest malutki wzgledem zwyklego elementu dom np <h3>
+        // ale ponadto jego jeszcze nie ma w DOMie, i dlatego pobralismy ta druga bilbioteke react-dom
+        // One sa oddzielone dlatego ze tresci na stronie mozna pokazywac na wiele innych sposobó niz DOM
+        // jakies aplikacje natwyne itp, no a wlasnie react-dom sluzy do zabawy z DOMem
+
+        // tworzymy malutki element Reacta, nie jest to DOM !
+        var h3 = React.createElement('h3',{},'Kurs jQuery');
+            
+        // i teraz dopiero dajemy go na strone jako DOM
+        ReactDOM.render(h3, document.getElementById('kurs'));
+
+        // tworzymy kolejny element
+        // zapisuje to dokladnie w taki sam sposób jak on
+        var div = React.createElement('div',{}, 
+                        React.createElement('h3',{},'Kurs React'), 
+                        React.createElement('p',{},'React od podstaw')
+                );
+
+        // i teraz tez go zalaczamy
+        ReactDOM.render(div, document.getElementById('kurs'));
+
+        // UWAGA! Dziwne w chuj bo u niego przy kazdym elemencie Reacta pisze "data-reactroot" a u mnie nic o_0
+
+        // W kazdym razie NAJWAZNIEJSZA INFOMRACJA jest taka że gdy React podnienia jakis element na stronie
+        // to NIE KASUJE WSZYSTKIE I NIE TWORZY OD NOWA, tylko on WYSZUKUJE JEDYNIE TE ELEMENTY KTORE SIE ZMIENILY !!!
+        // tylko nie wiem na ten moment czy chodzi tez o tekt w tych elementach, 
+        // ze podmienia wyłaćznie "React" w tekscie "kurs jQuery" zmieniając na "kurs React",
+        // czy jednak podmienia caly element widzac ze sie zmienil 
+
+        // poza tym nie przejmuj się takim dlugim zapisem jak w elemencie "div" bo wszystko bedzie prosciej z uzyciem JSX
+
+    </script>
+</body>
+</html>
