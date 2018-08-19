@@ -171,13 +171,26 @@
     // a drugie wystąpienie tej zmiennej to jestr po prostu to co jest na tym pasku napisane
     // widać jak zajebiście łatwo można dodawać te nowe elementy ale składnia na ten moment pojebana fest, trzeba przywyknąć
     // Dodajemy 2 nowe buttony do sterowania paskiem i obsługę do nich
+
     // << 1 >> W przyciskach do progress baru UZWYAMY SETINTERAVAL, w jednem zaczynamy a drugim zatrzymujemy
     // ZAUWAZ ze znowuw kazdym w tych przycisków musimy na nowo wpisac funkcję renderującą
     // W DALSZEJ CZĘSCI KURSU NAUCZYMY SIĘ TO OMIJAĆ ale na ten moment będzie wlasnie to robic na piechote
+
     // << 2 >> dodajemy jeszcze spana zeby to ladnie wygladalo a nie suchy string
 
     // WSZYSTKO DZIAŁA PIĘKNIE !
+    // nawet podczas przesuwania sie progres baru, mozesz swobodnie maniupolwac wielkoscia naglowkow, bez zadnych zakleszczen
+    // i po raz koljeny pieknie widac ze z całego elementu na stronie ZMIENIA SIE JEDYNIE WARTOSC % WIDTH
+    // TO JEST BARDZO WAZNA RZECZ ! Kapletnie nie obchodzi cie co trzeba w danej chwili zmienic w Twoim renderowanym fragmencie Reacta,
+    // On wszystko wyszukuje sam za ciebie, ty masz to tylko dobrze zaimplementowac
+    // Zauwaz ze metody przyciskow są całkowicie oddzielone od strefy Reactowej, ty masz tam wstawic tylko opdiwednie zmienne, 
+    // a całe zmienianie DOMU React bierze na siebie
+    // Jeszcze raz - wydaje sie ze ciagłe renderowanie takiej kupy kodu i to jeszcze co 300 milisekund, jak w czesci Reactowej, to duza robota dla przegladarki
+    // Ale WLASNIE NIE ! Najwieksza praca to ciagle wstawianie elementów DOM, kasowanie ich i pozniej ponowne ich pozycjonowanie
+    // ustalanie wysokosci, atrybutów, styli, rozmieszczenia itp - to jest katorga !
+    // i mimo ze React ma sporo kodu TO DZIALA W CIUUUUL SZYBCIEJ !
 
+    // Oczywiscie kod nie jest idelany i pasek napełnia sie nawet po 100% a jak nacisniesz kilka razy start to juz w ogole przjeebane :)
 
     </script>
 </body>
