@@ -1,0 +1,108 @@
+<!-- 6 -- Atrybuty i klasy elementów -->
+
+<!-- Korzytamy z szablonu bootstrapa na stronie  https://getbootstrap.com/docs/3.3/components/#media -->
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" 
+    integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">   
+
+    <!-- *********************************************    WAŻNE !!!  ********************************************* -->
+
+    <!-- UWAGA najnowsze linki z którymi nie działa konstrukcja React.DOM.div; -->
+    <!-- TRZEBA DOKLEIC SKRYPT ten co w 3 linicje I KAZDE React.DOM.div zastąpić ReactDOMFactories.div -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/react-dom-factories@1.0.0/index.js"></script>
+
+    <!-- ALBO UZYWAC WERSJI Z KTOREJ KORZYSTA ON i wtedy React.DOM.div działa -->
+    
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script> -->
+        
+    <!-- ********************************************************************************************************* -->
+    
+    <style>
+        .course{
+            padding: 10px;
+            border: 1px solid #e8e8e8;
+        }
+    </style>
+    
+    <title>Lesson 6</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1>Lekcja 6 Atrybuty i klasy elementów</h1>
+
+                <!-- zamieniamy "kurs" na "root" wzgledem poprzedniej lekcji -->
+                <div id="root">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // "div" zmieniamy na "course"
+
+        // ATRYBUTY ELEMENTÓW DODAJEMY ZA POMOCĄ DRUGIEGO ARGUMENTU W CREATEELEMENT !
+        // tak więc dodajemy sobie id - kurs oraz klase bootstrapowa media, ALE UWAGA ! 
+        // jako ze slowo "class" w JS jest zastrzezone MUSISZ TO PODAC ZA POMOCA className !!!
+
+        // UWAGA zmieniona nazwa course na courseCrEl bo jest to wersja z samymi create.Element a zastepujemy to wersja ponizej
+        var courseCrEl = React.createElement('div',{id:'kurs', className:'media'},   // OK
+                        React.createElement('h3',{},'Kurs React'), 
+                        React.createElement('p',{},'React od podstaw')
+                );
+        
+        // czyli u góry renderujemy "course" w elemencie "root"
+
+        // UWAGA ! Jest drugi sposób mówienia Reactowi jaki element ma utworzyć ! 
+        // Zamiast 
+        //      React.createElement('div);
+        // można skorzystać ze skróconej wersji
+        //      React.DOM.div;
+        // Aczkolwiek ten wiersz u góry pod spodem wykonuje właśnie metodę createElement
+
+        var div = ReactDOMFactories.div;    // ZGODNE Z WERSJA REACT nr 16 !!!!!!!!!!!!!!!
+        // UWAGA !!!
+        // To nie dziala z linkami które podpiąłem do najnowszej wersji !
+        // Musiałem przekopiować te od niego z kursu
+
+        var course = div({id:'kurs', className:'media course'}, // KLASA course TO NASZA WLASNA
+                        div({className:'media-left'},
+                            React.createElement('img', {className:'media-object', alt:'Miniatura Kursu', src:'http://placekitten.com/200/200'})
+                        ),
+                        div({className:'media-body'},
+                            React.createElement('h3',{className:'media-heading'},'Kurs React'), 
+                            React.createElement('p',{},'React od podstaw')
+                        )
+                );
+
+        // Wszystkie klasy powyzej są to klasy bootstrapa, ale oczywiscie mozemy rowniez dodac swoje
+        // Jedyna klasą dodaną przez nas jest klasa .course w divie id:kurs        
+
+        ReactDOM.render(course, document.getElementById('root'));  // "kurs" na "root", "div" na "course"
+
+        //  PODSUMOWANIE: 
+        //  wiesz jak dodawać do elementów atryboty, 
+        //  ze NIE WOLNO uzywac slowa class tylko className,
+        //  ze trzeba w chuj przeciwiczyc zagniezdanie tych elementów, kiedy jeden włazi w drugi a kiedy są obok siebie,
+        //  no i ze ta zjebana konstrukcja React.DOM.div nie dziala w najnowszej wersji Reacta 16
+        //  masz w związku z tym 2 wyjścia, albo pracować na 15
+        //  albo do wersji 16 wkleic dodatkowy skrypt, ten co u góry i każde React.DOM.div zmienic na  ReactDOMFactories.div;
+
+    </script>
+</body>
+</html>
