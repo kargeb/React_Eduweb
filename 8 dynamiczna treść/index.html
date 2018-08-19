@@ -1,0 +1,123 @@
+<!-- 8 -- Dynamiczna treść -->
+
+<!-- Pobierzemy dane z zewntarz i pokazemy ja na naszej stronie, wykorzystamy plik zalaczony do kursu w JSON -->
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" 
+    integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">   
+
+    <!-- *********************************************    WAŻNE !!!  ********************************************* -->
+    <!-- React.DOM.div  ->  ReactDOMFactories.div -->
+    <!-- ----------- REACT 16 ------------ -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/react-dom-factories@1.0.0/index.js"></script>
+
+    <!-- ----------- REACT 15 ------------ -->
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script> -->
+    <!-- ********************************************************************************************************* --> 
+    
+    <style>
+        .course{
+            padding: 10px;
+            border: 1px solid #e8e8e8;
+        }
+    </style>
+    
+    <title>Lesson 8</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1>Lekcja 8 Dynamiczna treść</h1>
+
+                <div id="root">
+                </div>
+
+                <button class="btn btn-default" id="grow"> + </button>
+                <button class="btn btn-default" id="shrink"> - </button>
+                <!-- << 4 >> -->
+                <button class="btn btn-default" id="prev">Prev</button>
+                <button class="btn btn-default" id="next">Next</button>
+            </div>
+        </div>
+    </div>
+    <!-- << 1 >>  -->
+    <script src="courses_data.js"></script> 
+    <script>
+        var div = ReactDOMFactories.div;  // ZGODNE Z WERSJA REACT nr 16 !
+
+        var font_size = 3;
+
+        var index = 0;                    //  << 5 >>
+        var data = courses_data[index];
+        // var data = courses_data[0];    // << 2 >>
+
+        var course = function() {
+            return div({id:'kurs', className:'media course'},
+                        div({className:'media-left'},                                          // << 3 >> podmieniamy kota
+                            React.createElement('img', {className:'media-object', alt:'Miniatura Kursu', src: data.image })
+                        ),
+                        div({className:'media-body'},                                                                // << 3 >>
+                            React.createElement('h3',{className:'media-heading', style:{ fontSize: font_size + 'em' }}, data.title ), 
+                            React.createElement('p',{ style:{ fontSize: (font_size/2) + 'em' } }, data.description ) // << 3 >>
+                        
+                        )
+                );      
+        }
+
+
+        document.getElementById("grow").addEventListener("click", function(){ 
+            font_size = font_size + 1;
+            render();
+        })
+
+        document.getElementById("shrink").addEventListener("click", function(){
+            font_size = font_size === 1 ? font_size : (font_size - 1 );
+            render();
+        })
+        // << 4 >>
+        document.getElementById("prev").addEventListener("click", function(){ 
+            font_size = font_size + 1;
+            render();
+        })
+
+        document.getElementById("next").addEventListener("click", function(){
+            font_size = font_size === 1 ? font_size : (font_size - 1 );
+            render();
+        })
+
+        function render(){
+            ReactDOM.render(course(), document.getElementById('root')); 
+        }
+        
+        render();
+
+/*
+    << 1 >> Załączamy nasz plik i od teraz mamy dostępną gloalną zmienna courses_data
+    << 2 >> pobranie pierwszych danych z brzegu 
+    << 3 >> (x3) podmieniamy kota i stringi za dane z pliku, 
+            Zwróć uwagę że nie musi wlasnie tam byc stringów czy źrodeł tylko TAKŻE ZMIENNE src: data.image
+            Po podmianie wszystko działa, manipulacja rozmiarem tekstu też
+    // Pierwsza część załatwiona, teraz pokażemy jak pięknie dynamicznie pobierać również dane z zewnątrz
+    // zrobimy podniemianie kolejnych wartości na stronie prosto z dołączonego pliku
+    << 4 >> (x2) Dodajemy nowe przyciski oraz ich obslugę
+    << 5 >> Modyfikujemy poprzednią zmienną, kolejnymi indexami będzie zarządzać zmienna 
+
+
+*/
+    </script>
+</body>
+</html>
