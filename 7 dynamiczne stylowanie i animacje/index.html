@@ -1,0 +1,74 @@
+<!-- 7 -- Dynamiczne stylowanie i animacje -->
+
+<!-- Korzytamy z szablonu bootstrapa na stronie  https://getbootstrap.com/docs/3.3/components/#media -->
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" 
+    integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">   
+
+    <!-- *********************************************    WAŻNE !!!  ********************************************* -->
+
+    <!-- UWAGA najnowsze linki z którymi nie działa konstrukcja React.DOM.div; -->
+    <!-- TRZEBA DOKLEIC SKRYPT ten co w 3 linicje I KAZDE React.DOM.div zastąpić ReactDOMFactories.div -->
+    <!-- ----------- REACT 16 ------------ -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/react-dom-factories@1.0.0/index.js"></script>
+
+    <!-- ALBO UZYWAC WERSJI Z KTOREJ KORZYSTA ON i wtedy React.DOM.div działa -->
+    <!-- ----------- REACT 15 ------------ -->
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script> -->
+        
+    <!-- ********************************************************************************************************* -->
+    
+    <style>
+        .course{
+            padding: 10px;
+            border: 1px solid #e8e8e8;
+        }
+    </style>
+    
+    <title>Lesson 7</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1>Lekcja Dynamiczne stylowanie i animacje</h1>
+
+                <div id="root">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+
+        var div = ReactDOMFactories.div;    // ZGODNE Z WERSJA REACT nr 16 !
+
+        var course = div({id:'kurs', className:'media course'},
+                        div({className:'media-left'},
+                            React.createElement('img', {className:'media-object', alt:'Miniatura Kursu', src:'http://placekitten.com/200/200'})
+                        ),
+                        div({className:'media-body'},
+                            React.createElement('h3',{className:'media-heading'},'Kurs React'), 
+                            React.createElement('p',{},'React od podstaw')
+                        )
+                );      
+
+        ReactDOM.render(course, document.getElementById('root')); 
+
+    </script>
+</body>
+</html>
