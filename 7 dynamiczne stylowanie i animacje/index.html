@@ -78,7 +78,10 @@
                             // ^^^^^ DALY CIĄG - pasek postępu
                             "Ładowanie ...",    // MOŻNA DODAĆ SAM STRING, nie muszą to być elementy
                             div({ className:'progress' },   // Uwaga, dodanie jednej klasy "active" sprawia ze ten pasek sie rusza
-                                 div( { className: 'progress-bar progress-bar-success progress-bar-striped active', style:{width: progress + '%'} }), progress + "%")
+                                 div( { className: 'progress-bar progress-bar-success progress-bar-striped active', style:{width: progress + '%'}},
+                                 React.createElement('span', {},progress + "%"))  //  << 2 >> dodanie spana
+                                )
+                        
                         )
                 );      
         }
@@ -103,6 +106,7 @@
             render();
         })
         
+        // << 1 >> sterowanie progress barem - setInterval
         var interval; 
         document.getElementById("start").addEventListener("click", function(){ 
             interval = setInterval( function(){
@@ -167,7 +171,12 @@
     // a drugie wystąpienie tej zmiennej to jestr po prostu to co jest na tym pasku napisane
     // widać jak zajebiście łatwo można dodawać te nowe elementy ale składnia na ten moment pojebana fest, trzeba przywyknąć
     // Dodajemy 2 nowe buttony do sterowania paskiem i obsługę do nich
+    // << 1 >> W przyciskach do progress baru UZWYAMY SETINTERAVAL, w jednem zaczynamy a drugim zatrzymujemy
+    // ZAUWAZ ze znowuw kazdym w tych przycisków musimy na nowo wpisac funkcję renderującą
+    // W DALSZEJ CZĘSCI KURSU NAUCZYMY SIĘ TO OMIJAĆ ale na ten moment będzie wlasnie to robic na piechote
+    // << 2 >> dodajemy jeszcze spana zeby to ladnie wygladalo a nie suchy string
 
+    // WSZYSTKO DZIAŁA PIĘKNIE !
 
 
     </script>
