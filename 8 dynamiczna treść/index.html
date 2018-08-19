@@ -65,7 +65,7 @@
         var data = courses_data[index];
         // var data = courses_data[0];    // << 2 >>
 
-        var course = function() {
+        var course = function(data) {    //  << 8 >>
             return div({id:'kurs', className:'media course'},
                         div({className:'media-left'},                                          // << 3 >> podmieniamy kota
                             React.createElement('img', {className:'media-object', alt:'Miniatura Kursu', src: data.image })
@@ -88,19 +88,23 @@
             font_size = font_size === 1 ? font_size : (font_size - 1 );
             render();
         })
+
         // << 4 >>
-        document.getElementById("prev").addEventListener("click", function(){ 
-            font_size = font_size + 1;
+        document.getElementById("next").addEventListener("click", function(){ 
+            index = index + 1;     // << 6 >>
+            // data = courses_data[index];  << 9 >>
             render();
         })
 
-        document.getElementById("next").addEventListener("click", function(){
-            font_size = font_size === 1 ? font_size : (font_size - 1 );
+        document.getElementById("prev").addEventListener("click", function(){
+            index = index === 0 ? 0 : ( index - 1 );   // << 6, 7 >>
+            // data = courses_data[index];  << 9 >> 
             render();
         })
 
-        function render(){
-            ReactDOM.render(course(), document.getElementById('root')); 
+        function render(){  //  << 8 >>
+            data = courses_data[index];  // << 9 >>
+            ReactDOM.render(course(data), document.getElementById('root')); 
         }
         
         render();
@@ -115,8 +119,18 @@
     // zrobimy podniemianie kolejnych wartości na stronie prosto z dołączonego pliku
     << 4 >> (x2) Dodajemy nowe przyciski oraz ich obslugę
     << 5 >> Modyfikujemy poprzednią zmienną, kolejnymi indexami będzie zarządzać zmienna 
-
-
+    << 6 >> (x2) Uwaga BARDZO WAZNE zebys za kazdym razem, w tych przyciskach, pobieral te dane jeszcze raz
+            zaraz po zmianie indexu, niech nie zmyli Cie ze skoro jest to w << 5 >> to nie trza jusz
+    << 7 >>  index = index === 0 ? 0 : ( index - 1 );  Zajebista jest ta konstrukcja, musisz ją wyryć na pamięc
+    << 8 >> (x2) Tutaj jest bardzo ważny motyw, tak na przyszłość jeśli faktycznie pobierasz jakieś dane
+            to nie przechowuj ich w globalnych zmiennych tylko PRZEKAZUJ JE BZPOŚRENIO DO FUNKCJI,
+            tylko uważaj, zarówno w deklaracji jak i w wywołaniu
+            var course = function(data) {      ,    ReactDOM.render(course(data),
+    << 9 >> (x3) I teraz mała zmiana koncepcji, przeniesienie idexowania danych do funkcji render    
+    
+    Działa zajebiście! Praktycznie bez żadnej zmiany szablonu Recta, tyle co podstawiając 3 zmienne z "data"
+    całkowicie zmieniliśmy funkcjonalność strony ! 
+    (kod jest zabezpieczony przed indexem mniejszym niz 0 ale wypieprza sie gdy przekroczymy max wartosc :)
 */
     </script>
 </body>
