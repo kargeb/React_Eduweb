@@ -1,0 +1,78 @@
+<!-- 9 -- Konfiguracja i renderowanie JSX -->
+
+<!-- Pokazane zostnie jak mozna duzo szybciej renderowac Reacta korzystając z SZABLONÓW JSX (dźejEsEx :) -->
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" 
+    integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">   
+
+    <!-- *********************************************    WAŻNE !!!  ********************************************* -->
+    <!-- React.DOM.div  ->  ReactDOMFactories.div -->
+    <!-- ----------- REACT 16 ------------ -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/react-dom-factories@1.0.0/index.js"></script>
+
+    <!-- ----------- REACT 15 ------------ -->
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script> -->
+    <!-- ********************************************************************************************************* --> 
+    <!-- << 1 >> -->
+    <!-- ----------- BABEL STANDALONE 6.26 ------------ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.js" ></script>
+    <title>Lesson 9</title>
+</head>
+<body>
+    <div>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h1>Lekcja  9 -- Konfiguracja i renderowanie JSX</h1>
+                    <div id="root">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <footer class="footer">
+            <div class="container">
+                <p></p>
+
+            </div>
+        </footer>
+    </div>
+    <!-- << 2 >> -->
+    <script type="text/babel">
+
+        // var elem = React.createElement("h1", null, "Witaj w kursie React!");
+        // << 3 >>
+        var elem = <h1>Witaj w JSX!</h1>
+
+        ReactDOM.render(elem, document.getElementById("root"));
+/*
+    UWAGA ! Sam javascript NIE ROZPOZNAJE JSX! Trzeba skorzystać w tym przypadku z biblioteki BABEL
+    << 1 >> Pobieramy babela tak samo jak Reacta s serwera CDN wpisujac -> babel.js cdn
+    Wybieramy wersje STANDALONE, on ma 6.12  ja mam  6.26  wiec moze bedzie bez przygod
+    Jest to wersja działająca w przeglądarce, pozwalająca bardzo szybko przekształcić JSX na JS
+    Mówi ze pozniej nauczymy sie wszyskie linki łaczyc w calosc i mimifikowac wiec pewnie WebPack
+    << 2 >> UWAGA ! W chuj wazne - dodajemy do tagu script dopisek w src type="text/babel" !!!
+        dostajemy ostrzezenie w konsoli
+        You are using the in-browser Babel transformer. Be sure to precompile your scripts for production - https://babeljs.io/docs/setup/
+        więc wszystko gra, mowi ono ze przed wgraniem na serwer trzeba to wszystko przekompilowac bedzie do JS
+    << 3 >> WKRACZA DO AKCJI JSX ! Oto jak dokładnie to co u góry, uzyskać poprzez JSX - OK
+        Czyli dosłownie tak jakbysmy HTMLa przypisali do zmiennej, 
+        ALE PAMIĘTAJ to nie jest HTML, to jest XML z podobnymi właściwościami, ale on różni się od HTMLA i będzie o ty mowa
+*/
+    </script>
+</body>
+</html>
