@@ -56,9 +56,23 @@
 
         // var elem = React.createElement("h1", null, "Witaj w kursie React!");
         // << 3 >>
-        var elem = <h1>Witaj w JSX!</h1>
+        // var elem = <h1>Witaj w JSX!</h1>
 
-        ReactDOM.render(elem, document.getElementById("root"));
+        // << 4 >>              << 5 >> />       << 6 >>  << 8 >>
+        var course  = (
+            <div className="media">
+                <div className="media-left">
+                    <img src="http://placehold.it/150x150x" alt="cover" />
+                </div>
+                <div className="media-body">
+                    <h3>Temat kursu</h3>
+                    <p>Opis kursu ... </p>
+                </div>
+            </div>
+        )
+
+        // << 7 >> 
+        ReactDOM.render(course, document.getElementById("root"));
 /*
     UWAGA ! Sam javascript NIE ROZPOZNAJE JSX! Trzeba skorzystać w tym przypadku z biblioteki BABEL
     << 1 >> Pobieramy babela tak samo jak Reacta s serwera CDN wpisujac -> babel.js cdn
@@ -72,6 +86,48 @@
     << 3 >> WKRACZA DO AKCJI JSX ! Oto jak dokładnie to co u góry, uzyskać poprzez JSX - OK
         Czyli dosłownie tak jakbysmy HTMLa przypisali do zmiennej, 
         ALE PAMIĘTAJ to nie jest HTML, to jest XML z podobnymi właściwościami, ale on różni się od HTMLA i będzie o ty mowa
+     << 4 >> Jedziemy całkiem nową stronkę od nowa, Zauważ że mozna sobie wstawiać entery i spacje jak sie tylko podoba
+     << 5 >> Nie wiem jak sie komentuje w tym JSX, 
+        UWAGA ! Mając w JSX atrybut bez treścim czyli jednoznacznikowy MUSISZ GO ZAKOŃCZYĆ TYM ->  "/>" a nie ">" !!!   
+    << 6 >> UWAGA ! dokladnie taka sama sytuacja dotycząca class CSS jak w React - MUSISZ JA ZAPISAC -> className
+    << 7 >> renderujemy zmienna "course" (podmieniamy za "elem") - OK
+    << 8 >> WSZYSTKO DZIAŁA, ale cały ten nasz pseudo HTML mozna (nalezy) umieścic w nawiasach, 
+        dzięki czemu nie trzeba zaczynac od tej samej linijki co zmienna ale od razu mozna wyenterowac w dół 
+
+    UWAGA ! Teraz absolutna petarda! Oczywiście wiesz ze Babel nie robi zadnej magii i po prostu przekształca
+    tenpseudo HTML w JS ALE MOZNA OD RAZU ZOBACZYC TEN KOD WYNIKOWY ! 
+    Pojawia sie on w DevToolasch, na samym dole HEAD i w naszym wypadku wygląda dokładnie tak:
+        
+        var course = React.createElement(
+        "div",
+        { className: "media" },
+        React.createElement(
+            "div",
+            { className: "media-left" },
+            React.createElement("img", { src: "http://placehold.it/150x150x", alt: "cover" })
+        ),
+        React.createElement(
+            "div",
+            { className: "media-body" },
+            React.createElement(
+                "h3",
+                null,
+                "Temat kursu"
+            ),
+            React.createElement(
+                "p",
+                null,
+                "Opis kursu ... "
+            )
+        )
+    );
+
+    Jaja nie ? :) Przekształcił wszystko DOKŁADNIE NA TO CO ROBILIŚMY W POPRZEDNICH LEKCJACH
+
+    PODNAD TO nasz obiekt "course" cały czas istnieje w kodzie, jest dostępny i można wykorzystywać go
+    do dalszych prac na stronie !
+
+    TO wszystko to jest przedsmak tego co potrafi JSX !!!
 */
     </script>
 </body>
