@@ -69,7 +69,7 @@ setTimeout(function () {
 
 setTimeout(function () {
     obj.zwykla();
-}, 3000)
+}, 1000)
 
 
 
