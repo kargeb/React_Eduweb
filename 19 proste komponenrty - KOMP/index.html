@@ -1,6 +1,25 @@
 <!-- 19 -- Proste komponenty -->
 
-<!--  -->
+<!-- JEDNĄ Z NAJWAŻNIEJSZYCH FUNKCJONALNOŚCI BIBLIOTEKI REACT SĄ KOMPONENTY
+    Poznamy kilka sposobów ich tworzenia, jak zajebiście komponują się z 
+    szablonami JSX, jak zagniezdzac w sobie komponenty w bardziej skomplikowanych
+    strukturach i jak korzystać z komponentów stanowych żeby nasz interfejs 
+    wchodzil w interakcje z użytkownikiem
+
+    Tworząc nasz spis kursów kilka lekcji wczeniśniej korzytsaliśmy z szablonów.
+    Każdy kurs to był osoby szablon, przyciski również, tabelka po prawej stronie
+    też no i wszystko, cała lista, było zamieszczone również w osobnym szablonie
+    rendereującyk kolekcje elementów
+    Jak narazie nasze szablony tylko się nam pokazywały ale nie było jeszcze żadnej 
+    interakcji, przyciski nie działały itp
+
+    Ogólnie chodzi o to że jak na razie na naszej stronie widać wszystkie elementy,
+    ale np w sekcji "koszyk" albo "ulubione" oczywiście część z nich już nie będzie 
+    potrzebna, ale część zostanie, i właśnie tytak posłużymy się kopomnentami, żeby
+    jedne elementy ukrywać a inne zostawiać no i pewnie przemieszczać
+
+    POWRACAMY DO NASZYCH ZROBIONYCH WCZEŚNIEJ SZABLONÓW Z KURSAMI
+-->
 
 <!DOCTYPE html>
 <html lang="pl">
@@ -52,7 +71,8 @@
             </div>
         </footer>
     </div>
-
-    <!-- <script type="text/babel" src="obiekty.js"></script> -->
+    
+    <script src="courses_data.js"></script>
+    <script type="text/babel" src="app.jsx"></script>
 </body>
 </html>
