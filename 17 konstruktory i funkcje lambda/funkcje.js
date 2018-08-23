@@ -51,6 +51,7 @@ function KonstruktorDwa(nazwa) {
     this.name = nazwa;
     this.value = 999;
 
+// << 12 >>    
     this.strzalka = (argument) =>  console.log( argument + " " + this.name + " !" );
 
     this.zwykla = function(argument) {
@@ -96,7 +97,28 @@ setTimeout(function () {
      tablicach działają !
      Najpierw wszystkie elementy * 10, pozniej od kazdego minus 12 i
      na koniec wybranie jedynie tych ktore są mniejsze niz 30 [-2, 8, 18, 28] MEGA
+    << 11 >> Tworzymy nowy konstruktor 
+    << 12 >> no i tutaj mamy tą słynną sytuację z THIS
+        otóż jak sie wywołuje funkcję CALLBACK, czyli przekazywaną jako argument,
+         i chce się pobrać jakąś właściwość z obietku na jakim się wywołuje to:
+         (nie ważne jest undefined bo to przekazwyany argument, CHODZI O "OBIEKT !"
+          czyli o to jaką właściwość "nazwa" posiada obiekt na którym to wywołujemy)
+        - FUNKCJA STRZAŁKOWA MA DO TEJ WŁAŚCIWOŚCI DOSTĘP
+            setTimeout(czosz.strzalka, 1000)  -->  undefined OBIEKT !
+                
+        - FUNKCJA ZWYKŁĄ NIE MA! GUBI THIS!
+            setTimeout(czosz.zwykla, 1000)  -- >  undefined 
 
+        W PRZYPADKU FUNKCJI ZWYKŁEM TRZEBA RATOWAĆ SIĘ BINDEM! 
+            setTimeout(obj.zwykla.bind(obj), 1000)  -->  undefined OBIEKT !
 
+    JEST O BARDZO TYPOWY I BARDZO CZĘSTY BŁĄD W JAVASCRIPT! Ze giną THISy
+    trzeba na to uważać i doskonale wiedzieć jak sobie z tym radzić,
+    poza tym są to błędy które trudno wyśledzić       
 
+    Więc zapamiętaj że gdy będziesz gdzieś jakąś funkcję przekazwyał
+    TO NIECH TO BĘDZIE FUNKCJA STRZAŁKOWA - będzie wetdy trzymać THIS
+
+    No i kurwa najlepsze jest to że pracująć bezpośrednio w kosoli to u góry faktycznie się
+    dzieje, a robiąć kurwa to samo w kodzie to jakimś cudem obydwie funkcje dobrze działają ...
 */
