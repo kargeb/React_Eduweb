@@ -40,7 +40,6 @@
 
 	React jest wspanialym przykladem programowania funkcyjnego i deklaratywnego ! Bardzo wartosciowa wiedza, nieslychanie
 	przydatne koncepty.
-
 */
 
 

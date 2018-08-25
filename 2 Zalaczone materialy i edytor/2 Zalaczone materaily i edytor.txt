@@ -1,4 +1,4 @@
-/*	2	ZAŁACZONE MATERIAŁY I EDYTOR
+﻿/*	2	ZAŁACZONE MATERIAŁY I EDYTOR
 
 	Mozesz kozystac z dowolnego edytora ale skonfiguruj go tak samo jak ten chlop
 	
@@ -27,6 +27,4 @@
 	Każdą z lekcji mozesz odpalic w przegladarce ale pozniej pokaze jak korzystac z servera
 	
 	Mozna zaczac od sekcji 7 i skonfigurowac sobie od poczatku srodowisko ale nie szalej, ic od poczatku
-	
-	
 */
