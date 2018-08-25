@@ -1,18 +1,29 @@
 // 20 -- Atrybuty i własciwosci komponentow
 
-var courseMedia = function(data){
+/* 
+    Tutaj dowiesz się więcej o atrybutach, jak przekazywac dane między zagniezdzonymi komponentami.
+    oraz wykorzytamy kilka nowych konstrukcji z ES6
+*/
+
+// << 2 >> // zamiana funkcji na komponenty czyli props zamiast data w argumencie
+// << 3 >> // zmiana nazw wszystkich komponentów na DUZA litere z przodu
+var CourseMedia = function(props){
+    var data = props.data;
     return <img src={data.image} alt="cover" />;
 } 
 
-var newLabel = function(data){
+var NewLabel = function(props){
+    var data = props.data;
     return data.is_new ? <span className="label label-default"> NOWY! </span> : null;
 } 
 
-var coursePromoLabel = function(data){ 
+var CoursePromoLabel = function(props){ 
+    var data = props.data;
     return data.is_promo ? <b> Kurs jest w PROMOCJI! </b> : <span> Nie jest w promocji! </span>;
 }
 
-var courseActions = function (data) {
+var CourseActions = function (props) {
+    var data = props.data;
     return (
         <div className="btn-group pull-right">
             <button className="btn btn-default">Szczegóły kursu</button>
@@ -22,7 +33,8 @@ var courseActions = function (data) {
     )
 } 
 
-var courseDetails = function (data) {
+var CourseDetails = function (props) {
+    var data = props.data;
     return (
         <table className="table course_details">
             <tbody>
@@ -42,27 +54,29 @@ var courseDetails = function (data) {
 var Course = function (props) {
     var data = props.data;
     return (
+        // << 1 >> // zamiana wszystkich tutaj funkcji na komponenty
+        //  np. {CourseMedia(data)}   -->  < CourseMedia data={data} /> 
         <div className="media course">
             {/* course media column */} 
             <div className="media-left">
-                {courseMedia(data)}
+                < CourseMedia data={data} /> 
             </div>
 
             {/* course content column */}
             <div className="media-body">
-                <h3> {data.title} {newLabel(data)} </h3>
+                <h3> {data.title} < NewLabel data={data} /> </h3>
                 <p> {data.description}</p>
 
                 {/* promotion */}  
-                {coursePromoLabel(data)}
+                < CoursePromoLabel data={data} />
 
                 {/* Course actions */}
-                {courseActions(data)}
+                < CourseActions data={data} />
             </div>
 
             {/* course details column */}
             <div className="media-right">
-                {courseDetails(data)}
+                < CourseDetails data={data} />
             </div>
         </div>
     )
@@ -87,5 +101,19 @@ ReactDOM.render( < CoursesList list={list} /> ,document.getElementById("root"));
     
 
 /* 
+    Zaczynamy dość grubo, zauważ że wszystkie poszczegółbne elementy szablonu z którego korzystamy,
+    są w postaci funkcji, a teraz jak juz wiemy, nie musi to tak wyglądać
+    << 1 >> wszystkie te funkcje zamienimy sobie na komponenty
+        np. {CourseMedia(data)}   -->  < CourseMedia data={data} /> 
+    << 2 >> Oczywiście po zmianie WYWOLANIA z funkcji na atrybut
+        trzeba zmienić też samą deklarację z funkcji na KOMPONENT,
+        czyli zamiast przekazywac do niego "data" to dajemy tam "props"
+        a "data" wylawiamy z propsa linikje nizej    
+    << 3 >> Zmieniamy tez nazwy wszystkich kopmonentow na duza litere
+        var courseMedia = function(data){ .. }  -->
+        --> var CourseMedia = function(props){
+                 var data = props.data; ... }
     
+    
+
 */
