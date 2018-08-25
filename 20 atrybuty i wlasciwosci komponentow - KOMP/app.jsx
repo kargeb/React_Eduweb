@@ -7,90 +7,81 @@
 
 // << 2 >> // zamiana funkcji na komponenty czyli props zamiast data w argumencie
 // << 3 >> // zmiana nazw wszystkich komponentów na DUZA litere z przodu
-var CourseMedia = function(props){
-    var data = props.data;
+
+var CourseMedia = function({data}){ 
+    // << 4 >> DESTRUCTURING obiektów (zamiast var data = props.data)
+    // następnie zamiast var data = props.data -- > var CourseMedia = function({data})
     return <img src={data.image} alt="cover" />;
 } 
 
-var NewLabel = function(props){
-    var data = props.data;
-    return data.is_new ? <span className="label label-default"> NOWY! </span> : null;
-} 
+// << 6 >> Zamiana funkcji zwykłych na strzałkowe                   << 7 >> usuniecie srednikow na koncu!
+var NewLabel = ({data}) => ( data.is_new ? <span className="label label-default"> NOWY! </span> : null )
 
-var CoursePromoLabel = function(props){ 
-    var data = props.data;
-    return data.is_promo ? <b> Kurs jest w PROMOCJI! </b> : <span> Nie jest w promocji! </span>;
-}
+var CoursePromoLabel = ({data}) => ( data.is_promo ? <b> Kurs jest w PROMOCJI! </b> : <span> Nie jest w promocji! </span> )
 
-var CourseActions = function (props) {
-    var data = props.data;
-    return (
-        <div className="btn-group pull-right">
-            <button className="btn btn-default">Szczegóły kursu</button>
-            <button className="btn btn-default">Dodaj do ulubionyvh</button>
-            <button className="btn btn-default">Dodaj do koszyka</button>
-        </div>
-    )
-} 
+var CourseActions = ({ data }) => (
+    <div className="btn-group pull-right">
+        <button className="btn btn-default">Szczegóły kursu</button>
+        <button className="btn btn-default">Dodaj do ulubionyvh</button>
+        <button className="btn btn-default">Dodaj do koszyka</button>
+    </div>
+)
 
-var CourseDetails = function (props) {
-    var data = props.data;
-    return (
-        <table className="table course_details">
-            <tbody>
-                <tr>
-                    <th>Autor</th>
-                    <td>{data.author}</td>
-                </tr>
-                <tr>
-                    <th>Czas trwania</th>
-                    <td style={{ color: "green" }}>{data.duration}</td>
-                </tr>
-            </tbody>
-        </table>
-    )
-} 
+var CourseDetails = ({ data }) => (
+    <table className="table course_details">
+        <tbody>
+            <tr>
+                <th>Autor</th>
+                <td>{data.author}</td>
+            </tr>
+            <tr>
+                <th>Czas trwania</th>
+                <td style={{ color: "green" }}>{data.duration}</td>
+            </tr>
+        </tbody>
+    </table>
+)
 
-var Course = function (props) {
-    var data = props.data;
+// << 8 >> bardziej skomplikowana funkcja zamieniona na strzałkową
+var Course = (props) => {
+    var {data} = props;
     return (
         // << 1 >> // zamiana wszystkich tutaj funkcji na komponenty
         //  np. {CourseMedia(data)}   -->  < CourseMedia data={data} /> 
         <div className="media course">
             {/* course media column */} 
             <div className="media-left">
-                < CourseMedia data={data} /> 
+                {/* << 5 >>  ZMIANA data = {data} --> {...props}*/}
+                {/* < CourseMedia data={data} />  */}
+                < CourseMedia {...props} /> 
             </div>
 
             {/* course content column */}
             <div className="media-body">
-                <h3> {data.title} < NewLabel data={data} /> </h3>
+                <h3> {data.title} < NewLabel {...props} /> </h3>
                 <p> {data.description}</p>
 
                 {/* promotion */}  
-                < CoursePromoLabel data={data} />
+                < CoursePromoLabel {...props} />
 
                 {/* Course actions */}
-                < CourseActions data={data} />
+                < CourseActions {...props} />
             </div>
 
             {/* course details column */}
             <div className="media-right">
-                < CourseDetails data={data} />
+                < CourseDetails {...props} />
             </div>
         </div>
     )
 } 
 
-var CoursesList = function (props) {
+var CoursesList = (props) => {
     var list = props.list;
+    // << 9 >> zmiana funkcji w "map"
     return (
         <div>
-            {
-                list.map(function (data){ 
-                    return < Course data={data} key={data.id} />
-                })
-            }
+            {list.map((data) => < Course data={data} key={data.id} />)}
         </div>
     )
 }
@@ -113,6 +104,65 @@ ReactDOM.render( < CoursesList list={list} /> ,document.getElementById("root"));
         var courseMedia = function(data){ .. }  -->
         --> var CourseMedia = function(props){
                  var data = props.data; ... }
+    << 4 >> Teraz wchodzi ES6. Zwroc uwage na konstrukcje:
+            "var data = props.data;"             
+        i wlasnie tutaj wykorzystamy DESTRUCTURING OBIEKTOW z ES6 czyli zmienimy na to:
+            var {data} = props
+        ALE ZAUWAŻ że niewiele nam to dało w kwestii powtórzonego kodu bo powtarza się on w każdym komponocnie
+        Więc zrobimy to jeszcze krócej! Skup się! 
+        Zamieniamy to   ;
+            var NewLabel = function(props){
+                var {data} = props;
+        Na to:
+            var NewLabel = function( {data} ) { ... } !!!
+        Czyli zamiast wyciągać ten atrybut w ciele funkcji to 
+        WYCIĄGAMY GO OD RAZU Z PRZEKAZYWANEGO ARGUMENTU !!!    - OK
+        Jeżeli chcielibysmy wyciagnac więcej pól to nie ma zadnego problemu, robimy tak:
+                var NewLabel = function( {data, key, czosz} ) { ... }
+    << 5 >> Teraz musisz wiedziec (przypomniec sobie) jak przekopiowac jeden obiekt do drugiego
+        robimy to z uzyciem znowu ES6:   var propsCopy = {...props};
+        więc idąc tą drogą zmieniamy wszystkie wywołania {data} tutaj:
+                 < CourseMedia data={data} /> 
+        na wlasnie takie rozbity obiekt         
+                < CourseMedia {...props} /> 
+        Tutaj przekazujemy tylko jeden parametr więc nie ma to takiej mocy, ale gdybyśmy przekazwyalić więcej
+        no to już zajebista przejżystośc i oszczędniość kodu
+    << 6 >> No i ostatnia W CHUJ zmiana to ZAMIANA WSZYSTKICH TYCH KOMPONENTOWYCH FUNKCJI NA STRZAŁKOWE !
+    << 7 >> Pamiętaj o tym żeby usunąć średnik, BO NIE MOŻE ON KOŃCZYĆ WYRAŻEŃ (trzeba doczytac chyba)
+        CZYLI ZAMIENIAMY TO:
+            var NewLabel = function({data}){
+                return data.is_new ? <span className="label label-default"> NOWY! </span> : null;
+            } 
+        NA TO:
+            var NewLabel = ({data}) => ( data.is_new ? <span className="label label-default"> NOWY! </span> : null )
+    << 8 >>
+        UWAGA jak mamy bardziej skomplikowane ciało funkcji to zmieniamy jedynie to:
+            var CoursesList = function (props) {
+        no to:
+            var CoursesList = (props) => {        
+        czyli nie zmieniamy klamer {} na nawiasy () i zosatwiamy również słowo "return"    
+    << 9 >> no i tutaj też bardzo istotna zmiana        
+        Z TEGO:
+            <div>
+                {   // << 9 >> zmiana funkcji w "map"
+                    list.map(function (data){ 
+                        return < Course data={data} key={data.id} />
+                    })
+                }
+            </div>
+        NA TO:
+            <div> 
+                { list.map( (data) => < Course data={data} key={data.id} />) }
+            </div>
+        CZYLI W JEDNEJ LINI MOZEMY GENEROWAC CAŁA LISTE KOMPONENTOW
+
+        Wg niego JEST TO NAJBARDZIEJ JUŻ CZYTELNY FORMAT PRACY Z REACTem
+        w natępnych lekcjach własnie z tegkiego formatu będziemy korzystać
+
+        W dalszej częsci następne przykłady opcji parametryzowania komponentów
+
+        
+
     
     
 
