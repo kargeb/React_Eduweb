@@ -63,9 +63,14 @@ const App = React.createClass({
         }
     },
 
-    // loadMore: function(){
+    loadMore: function(){
+        var page = this.state.page + 1;
 
-    // },
+        this.setState({
+            page: page,
+            list: this.props.list.slice(0, page * 3)
+        })
+    },
 
     render: function(){
         return (
@@ -85,7 +90,7 @@ const App = React.createClass({
                         <div className="col-xs-12">
                             <hr /> 
                                                         {/* << 12 >> onClick */}
-                            {/* <button className="btn btn-default btn-block" onClick={this.loadMore} > Pokaż więcej ... </button> */}
+                            <button className="btn btn-default btn-block" onClick={this.loadMore} > Pokaż więcej ... </button>
                         </div>
                     </div>
                 </div>
