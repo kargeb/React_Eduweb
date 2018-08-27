@@ -20,13 +20,13 @@
     <!-- *********************************************    WAŻNE !!!  ********************************************* -->
     <!-- React.DOM.div  ->  ReactDOMFactories.div -->
     <!-- ----------- REACT 16 ------------ -->
-    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <!-- <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/react-dom-factories@1.0.0/index.js"></script>
+    <script src="https://unpkg.com/react-dom-factories@1.0.0/index.js"></script> -->
 
     <!-- ----------- REACT 15 ------------ -->
-    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script> -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
     <!-- ********************************************************************************************************* --> 
 
     <!-- ----------- BABEL STANDALONE 6.26 ------------ -->
@@ -34,29 +34,11 @@
 
     <title>Lesson 24</title>
 </head>
+<!-- << 5 >> -->
 <body>
-    <div>
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12">
-                    <h3>Lekcja 24 -- Przykład interaktywnej aplikacji</h3>
-                    <div id="root">
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-12">
-                    <hr>
-                    <button class="btn btn-default btn-block" id="show_more"> Pokaż więcej ... </button>
-                </div>
-            </div>
-        </div>
-        <footer class="footer">
-            <div class="container">
-                <p></p>
-            </div>
-        </footer>
-    </div>
+
+    <div id="root"></div>
+ 
     <script src="courses_data.js"></script>
     <script type="text/babel" src="components/Button.jsx"></script>
     <script type="text/babel" src="components/Cart.jsx"></script>
