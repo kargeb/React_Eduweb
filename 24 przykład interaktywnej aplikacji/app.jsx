@@ -10,6 +10,10 @@
    - zmienne do komponentow zadeklarowal jako const
    - no i kurwa jeszcze z 5 lekcji temu dodal dowawanie kolejnych danych na glownej liscie za 
     pomoca przycisku
+    - do styli dodal margin-top: 3.5em;
+    - no i do CartDetails dodal <h1> z ceną kursu! 
+
+
 */
 
 /* var CourseMedia = function({data}){ 

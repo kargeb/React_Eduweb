@@ -6,5 +6,8 @@ const CartButton = ( { in_cart, icon, label, className="btn btn-block" } ) => {
 }
 
 const CartDetails = (props) => (
-    <CartButton in_cart={true} />
+    <div className="course_details text-center">
+        <h1 className="thumbnail">{props.data.price} PLN</h1>
+        <CartButton in_cart={true} />
+    </div>
 )
