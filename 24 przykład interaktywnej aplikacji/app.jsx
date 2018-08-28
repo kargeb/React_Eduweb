@@ -210,6 +210,48 @@ ReactDOM.render(<App list={courses_data}/>, document.getElementById("root"));
     << 13 >> KURWA WKURWIA MNIE TEN CHŁOP !!! NA PIERDOLIŁ KURWA CZEGOŚ I CHUJ WIE KURWA CO TO
         I CHUJ WIE KURWA PO CO !!! Ja pierdole, myśle że poźniej wszystko wytłumaczy dokladnie bo JA PIERDOLE !
 
+    -------------------------------------------------------------------------------------------------------------
 
+    Dobra, mniej więcej czaje o co chodzi, zaczął korzystać z konstrukcji Reactowych nie tłumacząc że to
+    nie są jego funkcje tylko wlasnie funkcje Reacta. Myslę że wytłumaczy wszystko po kroku w dalszych lekcjach,
+    ale to co napisał tutaj ma całkiem sens.
 
+    WSZYSTKO ZACZYNA SIĘ OD REACTOWEJ FUNKCJI getInitialState:
+                getInitialState: function(){
+                return {
+                    page: 1,
+                    list: this.props.list.slice(0,3)
+                }
+            },
+    W niej ustawiamy sobie CHBYA początkowy stan wszystkiego co znaduje się na naszej ztronie zaraz po jej otwarciu.
+    No i jak sobie tutaj przypiszemy do "list" dane z "props" 
+    to w kodzie mozemy korzystac z TAKIEJ ZMIENNEJ:     this.state.list  NEI POWIEDZIAL KURWA SKAD TO STATE,
+    wiez podejzewam wlasnie ze jest to jakos zwiazne z ta funkcje getInistialState
+
+    Następnie mamy obługę tego przycisku:
+            loadMore: function(){
+            var page = this.state.page + 1;
+
+            this.setState({
+                page: page,
+                list: this.props.list.slice(0, page * 3)
+            })
+        },
+
+    sam przycisk powiększa tylko page o 1 
+    a później mamy znowuy funkcje REACTOWĄ która AKTUALIZUJE CAŁY STAN APLIKACJI,
+    czyli przypisuje tą powiększoną page do listy i zwiększa slice o 3 nowe dane
+    Trzeba zauwazyc ze tutak lista idzie prosto z props a nie ze state ...
+    
+    Aha no ale teraz widze, ze to co na samym początku wczytywania strony 
+        <CoursesList list={ this.state.list } />
+    to Jest to co ma sie wyswietlic na samym początku, więc faktycznie pobiera to z getInitialState,
+    ale po kliknieciu przycisku no to "list" zamieniamy juz na tą z props  
+        list: this.props.list.slice(0, page * 3)
+     i teraz juz zapominamy o liscie przypisanej z getInitialState
+     
+     Ogólnie to powiedzial jescze ze ta funkcja this.setState nie odswieza calej strony ODRAZU tylko
+     robi to w najodpowiedniejszym momencie, to juz React jakos na to wpada
+
+    Stworzyliśmy tak oto KOMPONENT STANOWY i właśnie tutaj już pomału zaczyna się prawidziwy REACT 
 */
