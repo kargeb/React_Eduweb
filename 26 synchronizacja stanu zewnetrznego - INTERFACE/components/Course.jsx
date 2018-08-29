@@ -30,12 +30,12 @@ const NewLabel = ({data}) => ( data.is_new ? <span className="label label-defaul
 
 const CoursePromoLabel = ({data}) => ( data.is_promo ? <b> Kurs jest w PROMOCJI! </b> : <span> Nie jest w promocji! </span> )
 
-// const CourseActions = ({ data }) => (
-//     <div className="btn-group pull-right">
-//         <Button label="Szczegóły kursu" />
-//         <Button label="Dodaj do ulubionych" icon="star" />
-//     </div>
-// )
+const CourseActions = ({ data }) => (
+    <div className="btn-group pull-right">
+        <Button label="Szczegóły kursu" />
+        <Button label="Dodaj do ulubionych" icon="star" />
+    </div>
+)
 
 
 
@@ -54,7 +54,7 @@ const Course = (props) => {
             <div className="media-body">
                 <h3> {data.title} < NewLabel {...props} /> </h3>
                 <p> {data.description}</p>
-
+                
                 {/* TYM ZAŁĄCZMY ELEMENTY BEZPOŚREDNIO ZAŁĄCZONE W CIELE KOMPONENTU !!!!!!!!!!!!!! */}
                 {props.children}   
             </div>
