@@ -86,10 +86,42 @@ const ShoppingCartList = (props) => {
     )
 }
 
+// ==========================================================================================================================================================
+// ==========================================================================================================================================================
+// ==========================================================================================================================================================
+
+
+
 // << 2 >>
 function StateStore(){
     this.state = {}
-    this.dispatchEvents = function(){
+
+    this.dispatchEvents = () => {
+        this.callback(this.state)
+    }
+
+    this.callback = function(){};   // domyślna funkcja, dopóki nie zostanie nadpisana 
+
+    this.addListener = (callback) => {
+        this.callback = callback;
+    }
+
+    this.createAction = function(handler){
+        var state = this.state;
+
+        return function(){
+            handler.apply(state, arguments);
+            AppState.dispatchEvents()
+        }
+    }
+
+    this.createActions = function(handlersMap){
+        var actions = {};
+        for (let name in handlersMap){
+            actions[name] = this.createAction(handlersMap[name]);
+        }
+
+        return actions;
     }
 }
 
@@ -102,6 +134,18 @@ AppState.state = {
     list: courses_data.slice(0,3)
 }
 
+var actions = AppState.createActions({
+
+    loadMore: function(event){ 
+        var page = this.page + 1;
+
+            console.log(event);
+            this.page = page,
+            this.list = this.courses.slice(0, this.page * 3)
+        }
+})
+
+
 
 const App = React.createClass({
     // << 3 >> zmiana initialState
@@ -109,14 +153,24 @@ const App = React.createClass({
         return this.props.store.state;
     },
 
-    loadMore: function(){
+    // << 4 >>
+    componentDidMount: function(){
+        AppState.addListener((state) => {
+            this.setState({
+                page: state.page,
+                list: state.list
+            })
+        })
+    },
+
+/*     loadMore: function(){
         var page = this.state.page + 1;
 
         this.setState({
             page: page,
             list: this.props.list.slice(0, page * 3)
         })
-    },
+    }, */
 
     render: function(){
         return (
@@ -131,7 +185,7 @@ const App = React.createClass({
                     <div className="row">
                         <div className="col-xs-12">
                             <hr /> 
-                            <button className="btn btn-default btn-block" onClick={this.loadMore} > Pokaż więcej ... </button>
+                            <button className="btn btn-default btn-block" onClick={actions.loadMore} > Pokaż więcej ... </button>
                         </div>
                     </div>
                 </div>
@@ -178,6 +232,12 @@ ReactDOM.render(<App store={AppState}/>, document.getElementById("root"));
         Na to:  -->  <App store={AppState}/> 
         CZYLI POD ZMIENNĄ store MAMY CAŁY NASZ OBIEKT AppState
         
+                    DO 5:00 minury SPOKO, później już kurrrwa ja pierdole
+
+---------------------------------------------------------------------------------------
+    PRZEDE WSZYSTKIM PAMIĘTAJ ŻE SETSTATE !!!!!! WYOWŁUJE RENDER !!!!!!!!!!!!!!!!!
+---------------------------------------------------------------------------------------
+
     TERAZ KURWA HARDOKR
     Chcemy w App nasluchiwac na zmiany stanu, czyli na to co się dzieje w funkcji 
         dispatchEvents w:
@@ -185,6 +245,26 @@ ReactDOM.render(<App store={AppState}/>, document.getElementById("root"));
                     this.state = {}
                     this.dispatchEvents = function(){
                     }
+    
+    Wtawiamy Reactową metodę:   -->  componentDidMount()   która 
+    zostanie wykonana przez REacta WUTOMATYCZNIE W CHWILI POJAWIENIA SIĘ
+    NASZEGO KOMPONENTU NA STRONIE !!!
+    Czyli wszystko co wniej się zrobi, MAMY PEWNOŚĆ ŻE ZROBI SIĘ GDY 
+    KOMPONENT BĘDZIE JUŻ ZAŁADOWANY, GOTOWY, PODPIĘTY NA STRONIE
+
+    Musimy NASŁUCHIWAĆ na zmianach! W czystym JS NIE DA SIĘ OBSERWOWAĆ
+    obiektu StateStore, TRZEBA PRZEKAZAĆ mu jakiś HANDLER
+    Robimy to tak jak WYWOŁUJE SIĘ ZDARZENIA, np kliknięcia
+    Dodajemy eventListener.
+        componentDidMount: function(){
+            AppState.addListener(function(){
+                //
+            })}
+    FUNCKJA PRZEKAZANA TUTAJ jako CALLBACK, zostanie wywołania
+    ZA KAŻDYM RAZEM, gdy ktoś wywoła dispatchEvents w StateStore 
+
+
+
 }
 
             
