@@ -20,7 +20,9 @@ const CoursesList = ({list}) => (
                     {/* Course actions */}
                     <div className="btn-group pull-right">
                         <Button label="Szczegóły kursu" />
-                        <StateButton  active={AppState.state.favourites_map[data.id]} onActive={actions.addFavourite} onDeactive={actions.removeFavourite}/>
+                        <StateButton  active={AppState.state.favourites_map[data.id]} 
+                            onActive={ () => actions.addFavourite(data.id)} 
+                            onDeactive={ () => actions.removeFavourite(data.id)}/>
                     </div>
 
                 </Course>)}
@@ -41,7 +43,9 @@ const FavouritesCoursesList = ({list}) => (
                     {/* Course actions */}
                     <div className="btn-group pull-right">
                         <Button label="Szczegóły kursu" />
-                        <StateButton  active={AppState.state.favourites_map[data.id]} onActive={actions.addFavourite} onDeactive={actions.removeFavourite}/>
+                        <StateButton  active={AppState.state.favourites_map[data.id]} 
+                            onActive={ () => actions.addFavourite(data.id)} 
+                            onDeactive={ () => actions.removeFavourite(data.id)}/>
                     </div>
 
                 </Course>)}
@@ -146,6 +150,10 @@ var AppState = new StateStore()
 AppState.state = {
     page: 1,
     courses: courses_data,
+    courses_map: courses_data.reduce((map, course) => {
+        map[course.id] = course;
+        return map;
+    },{}),
     list: courses_data.slice(0, 3),
     favourites_list: [],
     favourites_map: {}
@@ -160,15 +168,15 @@ var actions = AppState.createActions({
         this.list = this.courses.slice(0, this.page * 3)
     },
     // << 4 >>  Dodajemy dwie nowe akcje, THIS to STATE !
-    addFavourite: function(){
-        let id = 0;
+    addFavourite: function(id){
         this.favourites_map[id] = true;
-        this.favourites_list.push(this.courses[id])
+        this.favourites_list.push(this.courses_map[id])
     },
-    removeFavourite: function(){
-        let id = 0;
+    removeFavourite: function(id){
         this.favourites_map[id] = false;
-        this.favourites_list.pop()
+        let index = this.favourites_list.findIndex( (c) => c.id === id );
+        if(index !== -1)
+            this.favourites_list.splice(index, 1);
     },
 })
 
@@ -302,12 +310,92 @@ ReactDOM.render(<App store={AppState}/>, document.getElementById("root"));
         Wszystko działa, tylko że jak cofnie się kurs z listy ulubionych to jego przycisk na zwykłej liście
         dalej ma etykiete "Usun z ulubionych".
         NO I CHUJ, kolejny popis prowadzącego, dołożył specjlaną funkcję Reacta I CHUJA O NIEJ KURWA POWIEDZIAŁ !
-
-
-
+                    componentWillReceiveProps: function(nextProps){
+                        this.setState({
+                            active: nextProps.active
+                        })
+                    },
+        Dzięki tej metodzie DANY KOMPONENT WIE ZE ZMIENIL SIĘ STAN APLIKACJI W INNYM MIEJSCU, 
+        i ustawia właśnie jego aktualne dane. Trzeba zauwazyć że nie pobieramy tutaj stanu
+        ogólnej aplikacji, tylko stan "active" tego komponentu.
+        No i po tej funkcji już faktycznie to działa, ALE DALEJ CHUJA O NIEJ WIEM !!!
         
+        Czyli jeśli komponent się nie przerenderowywuje, wtedy kiedy powinien, MUSUISZ SPRAWDZIC
+        CZY WŁAŚNIE funkcja setState jest uruchamiana w każdym właściwym momencie. 
+        Dzięki "componentWillReceiveProps" komponent ZWYKŁEJ LISTY zostaje przerenderowany nawet wtedy,
+        gdy zmienia się stan komponentu ULUBIONYCH.
+        W przeciwnym wypadku, React stwierdzi ze skoro nic nie wydarzylo się na zwenątrz to tutaj też nic nie robimy.
+
+        ------------- pozostaje już zorbić do samo dla wszystkich danych a nie tylko dla id=0 -------------
+
+        Trzeba wskazać którego konkretnego elementu akcja się tyczy.
+        Przenosimy id z ciala metody to jej argumentu:
+        ZMIENIAMY TO:
+                addFavourite: function(){
+                    let id = 0;
+                    this.favourites_map[id] = true;
+                    this.favourites_list.push(this.courses[id])
+                },
+        NA TO:
+                 addFavourite: function(id){
+                    this.favourites_map[id] = true;
+                    this.favourites_list.push(this.courses[id])
+                },
+
+        Dzięki zmienej "arguments" w funkcji createAction, nic się nie pojebie:
+            this.createAction = function (handler) {
+                var state = this.state;
+
+                return function () {
+                    handler.apply(state, arguments);  <--- arguments przejmie id !!
+                    AppState.dispatchEvents()
+                }
+            }        
+
+        A przekazanie addFavourite i removeFavourite przekształcamy na takie:
+            <StateButton  active={AppState.state.favourites_map[data.id]} 
+                    onActive={ () => actions.addFavourite(data.id)}    <-- zmiana na wywolanie fukncji 
+
+        Tylko kurwa nie wiem czy ta funkcja wykonuje sie jzu podczas przekazania ? czy pozniej ...
+        
+        Jest jeden jeszcze problem z funkcja addFavvourite i tą drugą tutaj:
+                this.favourites_list.push(this.courses[id])
+
+        Bo w nawiasie to id to nie jest element tylko KOLEJNOŚĆ w tablicy course.
+        Tworzymy nową zmienną ktora będzie MAPĄ zrobioną z obiektu courses_data.
+        Robimy tak, że każde ID w courses_data będzie odpowiadała temu wlasnie obiektowi.
+        Oto to przekształcenie:
+            courses_map: courses_data.reduce((map, course) => {
+                map[course.id] = course;
+                return map;
+            },{}),
+
+        Nie rozumiem działania tutaj reduce, trzeba to ogrnąć, w każdym razie wychodzi to co powinno,
+        czyli pod zmienną courses_map, mamy klucz jako "id" i wartość jako odpowiadajacy mu obiekt.
+        
+        mając courses_map, to wlasnie na jej podstawie będziemy ładować dane to favourite_lits:
+                addFavourite: function(id){
+                    this.favourites_map[id] = true;
+                    this.favourites_list.push(this.courses_map[id])
+
+        Ale przy przy funkcji removeFavourite, już musimy skorzystać ze zwykłego wyszukiwania po indexie:
+            removeFavourite: function(id){
+                this.favourites_map[id] = false;
+                let index = this.favourites_list.findIndex( (c) => c.id === id );
+                if(index !== -1)
+                    this.favourites_list.splice(index, 1);
+            },
+
+        UWAGA ! Korzysamu tutaj z funkcji sPlice a w innej czesci kodu korzystamy ze SLICE !!!
+        OBCZAJ DOKLADNIE CZYM SIE ROZNI JEDNA OD DRUGIEJ !!!
+
+        KONIEC KURWA, działa ... mam dość
 
 
-
+        Czyli do nauczenia się jest:
+            -map
+            -reduce (na map)
+            - slice
+            - splice
 
 */
