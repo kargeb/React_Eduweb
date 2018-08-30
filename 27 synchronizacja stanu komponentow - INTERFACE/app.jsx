@@ -20,7 +20,7 @@ const CoursesList = ({list}) => (
                     {/* Course actions */}
                     <div className="btn-group pull-right">
                         <Button label="Szczegóły kursu" />
-                        <StateButton onActive={actions.addFavourite} onDeactive={actions.removeFavourite}/>
+                        <StateButton  active={AppState.state.favourites_map[data.id]} onActive={actions.addFavourite} onDeactive={actions.removeFavourite}/>
                     </div>
 
                 </Course>)}
@@ -41,7 +41,7 @@ const FavouritesCoursesList = ({list}) => (
                     {/* Course actions */}
                     <div className="btn-group pull-right">
                         <Button label="Szczegóły kursu" />
-                        <StateButton />
+                        <StateButton  active={AppState.state.favourites_map[data.id]} onActive={actions.addFavourite} onDeactive={actions.removeFavourite}/>
                     </div>
 
                 </Course>)}
@@ -63,6 +63,13 @@ var StateButton = React.createClass({
             onDeactive: function() {}
         } 
     },
+
+    componentWillReceiveProps: function(nextProps){
+        this.setState({
+            active: nextProps.active
+        })
+    },
+
     setActive: function () { 
         this.setState({ 
             active: true,
@@ -140,7 +147,8 @@ AppState.state = {
     page: 1,
     courses: courses_data,
     list: courses_data.slice(0, 3),
-    favourites_list: []
+    favourites_list: [],
+    favourites_map: {}
 }
 
 var actions = AppState.createActions({
@@ -148,14 +156,18 @@ var actions = AppState.createActions({
     loadMore: function (event) {
         var page = this.page + 1;
 
-        this.page = page,
+        this.page = page;
         this.list = this.courses.slice(0, this.page * 3)
     },
     // << 4 >>  Dodajemy dwie nowe akcje, THIS to STATE !
     addFavourite: function(){
-        this.favourites_list.push(this.courses[0])
+        let id = 0;
+        this.favourites_map[id] = true;
+        this.favourites_list.push(this.courses[id])
     },
     removeFavourite: function(){
+        let id = 0;
+        this.favourites_map[id] = false;
         this.favourites_list.pop()
     },
 })
@@ -260,6 +272,40 @@ ReactDOM.render(<App store={AppState}/>, document.getElementById("root"));
                     },
         ZAWUWAŻ że wywołyjemy tutaj naszą wymyśloną nazwę przekazanego argumentu (handlera) czyli "onActive" !           
 
+        ----------- pierwsza częśc za nami -----------------
+        Teraz mamy problem, bo jak wkleimy tą samą obsługę przycisku do komponentu "FavouritesCoursesList",
+        czyli koszyka, to nie działa jego usunięcie z tamtąd. DLATEGO ŻE KOMPONENTY CourseList i FavouritesCoursesList
+        NIE INFORMUJĄ SIEBIE NAWZAJEM O SWOICH STANACH ! No i aplikacja głupieje.
+
+        Tak więc trzeba dodać informacje do STANU NASZEJ APLIKACJI o tym które kursy są już w ulubionych.
+        Tworzymy więc taką listę, ale nie zwykłą listą tylko OBIEKTEM MAP (który kojarzysz).
+        A mapie chodzi o to że nie chodzi o kolejność, jest to zbiór wartości z kluczem,
+        czyli można po prostu szybko sprawdzić czy coś się w tym zbirze znajduje czy nie.
+                        favourites_map: {}
+
+        Narazie na przykladzie jednej danej, robimy dodawanie i usuwanie z tej listy:
+
+                    addFavourite: function(){
+                        let id = 0;
+                        this.favourites_map[id] = true;
+                        this.favourites_list.push(this.courses[id])
+                    },
+                    removeFavourite: function(){
+                        let id = 0;
+                        this.favourites_map[id] = false;
+                        this.favourites_list.pop()
+                    },
+
+        I w ten sposób przekazujemy to do obydwu list:
+        <StateButton  active={AppState.state.favourites_map[data.id]} onActive={actions.addFavourite} onDeactive={actions.removeFavourite}/>
+
+        Wszystko działa, tylko że jak cofnie się kurs z listy ulubionych to jego przycisk na zwykłej liście
+        dalej ma etykiete "Usun z ulubionych".
+        NO I CHUJ, kolejny popis prowadzącego, dołożył specjlaną funkcję Reacta I CHUJA O NIEJ KURWA POWIEDZIAŁ !
+
+
+
+        
 
 
 
