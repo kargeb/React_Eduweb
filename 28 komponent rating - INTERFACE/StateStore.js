@@ -1,31 +1,37 @@
-function StateStore() {
-    this.state = {}
+function StateStore(){
+	this.state = {}
 
-    this.dispatchEvents = () => {
-        this.callback(this.state)
-    }
+	this.setState = function(state){
+		this.state = {...this.state, ...state}
+		this.dispatchEvents()
+	}
 
-    this.callback = function () { };
+	this.dispatchEvents = ()=> {
+		for(let callback of this.callbacks){
+			callback(this.state)
+		}
+	}	
 
-    this.addListener = (callback) => {
-        this.callback = callback;
-    }
+	this.callbacks = []
 
-    this.createAction = function (handler) {
-        var state = this.state;
+	this.addListener = (callback) => {
+		this.callbacks.push(callback);
+	}
 
-        return function () {
-            handler.apply(state, arguments);
-            AppState.dispatchEvents()
-        }
-    }
+	this.createAction = function(handler){
+		var state = this.state;
+		return function(){
+			handler.apply(state, arguments);
 
-    this.createActions = function (handlersMap) {
-        var actions = {};
-        for (let name in handlersMap) {
-            actions[name] = this.createAction(handlersMap[name]);
-        }
+			AppState.dispatchEvents();
+		}
+	},
 
-        return actions;
-    }
+	this.createActions = function(handlersMap){
+		var actions = {}
+		for(let name in handlersMap){
+			actions[name] = this.createAction(handlersMap[name])
+		}
+		return actions;
+	}
 }
