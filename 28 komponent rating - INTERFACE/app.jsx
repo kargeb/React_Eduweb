@@ -20,6 +20,33 @@ AppState.setState({
 	favourites_map: {}
 })
 
+const Rating = React.createClass({
+
+	getDefaultProps: function() {
+		return {
+			max: 5,
+			value: 0
+		}
+	},
+
+	getInitialState: function(){
+		return {
+			indicator: this._makeIndicator(this.props.value, this.props.max)
+		}
+	},
+
+	_makeIndicator: function(rating,max){
+		return [ ...Array(rating).fill(true), ...Array(max-rating).fill(false) ]
+	},
+
+	render: function(){
+		return <div>
+			{ this.state.indicator.map( (item,i) => ( <span key={i} className={"glyphicon " + (item ? "glyphicon-star" : "glyphicon-star-empty")}> </span>) )  }
+		</div>
+	}
+})
+
+
 const actions = AppState.createActions({
 	loadMore: function(event){
 		var page = this.page + 1;
@@ -49,6 +76,23 @@ ReactDOM.render(<App store={AppState} actions={actions} />, document.getElementB
 	- zrobil z callbaka listę zamiat jedej zmiennej w StateStore
 	
 	 O JAK DOBRZE ze w jego plikach są foldery START i FINISH
-	 
-	 
+	 Tak pojebał ze musieliśmy podmienić wszystkie pliki na te z jego kursu!
+
+	-----------------
+	tworzymy Rating i umieszczamy go w Course
+	pozniej od razu robimy wlasciwosc render i wstawiamy tam gwiazdki
+	gwiazdki wstawiamy jako zmapowana tablica 5 elemtnwo i dodajemy tez index jako key
+
+	JESLI MAMY DYNAMICZNE DANE TO KOZYSTAMY Z OBIEKTU STATE
+	A JESLI MAMY STAN O OCZYWISCIE UZYWAMY METODY GETINITIALSTATE
+
+	W gwiazdach robimy warunek : kiedy zamknieta a kiedy otwarta
+	dodajemy indicator jako tablca do gwiazdek w state
+
+	w getinitialstate ustawiamy indicator za pomoca MEGAZAJEBISTEJ funkcji -makeIndicator
+
+	DO nauki lub przypomnienia:
+		
+		- map
+		- metoda fill na tablicach
 */ 
