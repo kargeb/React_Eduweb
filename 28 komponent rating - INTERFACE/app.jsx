@@ -1,3 +1,8 @@
+// 28 komponent rating
+
+/* 
+     Stworzymy komponent służacy do oceny poszczególnych kursów
+*/
 
 var AppState = new StateStore();
 
@@ -37,3 +42,13 @@ const actions = AppState.createActions({
 
 ReactDOM.render(<App store={AppState} actions={actions} />, document.getElementById('root'));
 
+/* 
+    ZROBIŁ SOBIE KURWA PORZĄDKI:
+    - porozdzielal na pliki kopmonenty
+    - wywolaniu render jest dodatkowo aciotns={actions} jest teraz
+	- zrobil z callbaka listę zamiat jedej zmiennej w StateStore
+	
+	 O JAK DOBRZE ze w jego plikach są foldery START i FINISH
+	 
+	 
+*/ 
