@@ -25,7 +25,8 @@ const Rating = React.createClass({
 	getDefaultProps: function() {
 		return {
 			max: 5,
-			value: 0
+			value: 0,
+			onChange: function(){}
 		}
 	},
 
@@ -137,11 +138,25 @@ ReactDOM.render(<App store={AppState} actions={actions} />, document.getElementB
 	gdy naprzykład zrobi to jakieś zewnętrzne źródło danych, lub inny komponent
 	(np sytuacja w ktorej po naszym zaglosowaniu na serwerze zostanie przeliczona srednia
 	i wynik zostanie zwrocony)
+
 		componentWillReceiveProps: function(nextProps){
 			if(this.state.rating != nextProps.value){
 				this.setRating(nextProps.value)
 			}
 		},
+
+	Nie wiem tylko jesczze do konca o chuj chodzi z tym że onChange wykoncuje sie w tym miejscu:
+	
+		const CourseDetails = ({data}) => (
+		<div>
+			<table className="table course_details">
+				<tbody>
+					<tr>
+						<th>Ocena</th>
+						<td>
+							<Rating max={5} value={1} onChange= { (rating) => console.log(rating) }/>
+
+	A nie da się kurwa z komponentu Rating						
 
 
 	DO nauki lub przypomnienia:
