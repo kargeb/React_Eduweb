@@ -5,7 +5,7 @@ const CourseDetails = ({data}) => (
 				<tr>
 					<th>Ocena</th>
 					<td>
-						<Rating max={5} value={1}/>
+						<Rating max={5} value={1}  onChange={ (rating) => console.log(rating) }/>
 					</td>
 				</tr>
 

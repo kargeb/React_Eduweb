@@ -29,19 +29,56 @@ const Rating = React.createClass({
 		}
 	},
 
-	getInitialState: function(){
-		return {
-			indicator: this._makeIndicator(this.props.value, this.props.max)
+	componentWillReceiveProps: function(nextProps){
+		if(this.state.rating != nextProps.value){
+			this.setRating(nextProps.value)
 		}
 	},
 
+	getInitialState: function(){
+		return {
+			indicator: this._makeIndicator(this.props.value, this.props.max),
+			rating: this.props.value
+		}
+	},
+
+	onMouseEnter: function(i){
+		return () => this.setIndicator(i); // przekazanie do indykatora
+	},
+
+	onMouseLeave: function(i){
+		return () => this.setIndicator(this.state.rating);	// ustawienie domyslnej
+	},
+
+	onClick: function(i){
+		return () => this.setRating(i);	// wstawienie do STANU kopomnentu
+	},
+
+	setRating: function(rating){
+		this.setState({
+			rating: rating
+		})
+		this.setIndicator(rating);
+		this.props.onChange(rating)
+	},
+
+	setIndicator: function(rating) {
+		this.setState({
+			indicator: this._makeIndicator( rating, this.props.max )
+		})
+	},
+	
 	_makeIndicator: function(rating,max){
 		return [ ...Array(rating).fill(true), ...Array(max-rating).fill(false) ]
 	},
 
 	render: function(){
 		return <div>
-			{ this.state.indicator.map( (item,i) => ( <span key={i} className={"glyphicon " + (item ? "glyphicon-star" : "glyphicon-star-empty")}> </span>) )  }
+			{ this.state.indicator.map( (item,i) => ( <span key={i} 
+				className={"glyphicon " + (item ? "glyphicon-star" : "glyphicon-star-empty")}
+				onMouseEnter={this.onMouseEnter(i+1)} onMouseLeave={this.onMouseLeave(i+1)} 
+				onClick={this.onClick(i+1)}> 
+				</span>) )  }
 		</div>
 	}
 })
@@ -90,9 +127,25 @@ ReactDOM.render(<App store={AppState} actions={actions} />, document.getElementB
 	dodajemy indicator jako tablca do gwiazdek w state
 
 	w getinitialstate ustawiamy indicator za pomoca MEGAZAJEBISTEJ funkcji -makeIndicator
+	Zajebiste jest to ze mozesz sobie przeslac nawet 100 gwiazdek i wszystkie od razu sie pokazuja :)
+
+	TWORZYMY OSBLUGE ZDARZEN MYSZY - onMouseEnter i onMouseLeave
+
+	(nie ma raczej nic czego nie mozna zrozumiec z kodu)
+
+	Konczymy dodając funkcję która wywołuje się za każdym razem gdy ZMIENIĄ SIĘ PROPERETIES,
+	gdy naprzykład zrobi to jakieś zewnętrzne źródło danych, lub inny komponent
+	(np sytuacja w ktorej po naszym zaglosowaniu na serwerze zostanie przeliczona srednia
+	i wynik zostanie zwrocony)
+		componentWillReceiveProps: function(nextProps){
+			if(this.state.rating != nextProps.value){
+				this.setRating(nextProps.value)
+			}
+		},
+
 
 	DO nauki lub przypomnienia:
-		
+
 		- map
 		- metoda fill na tablicach
 */ 
