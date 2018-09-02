@@ -122,7 +122,7 @@ ReactDOM.render(<App store={AppState} actions={actions} />, document.getElementB
 	gwiazdki wstawiamy jako zmapowana tablica 5 elemtnwo i dodajemy tez index jako key
 
 	JESLI MAMY DYNAMICZNE DANE TO KOZYSTAMY Z OBIEKTU STATE
-	A JESLI MAMY STAN O OCZYWISCIE UZYWAMY METODY GETINITIALSTATE
+	JESLI MAMY STAN O OCZYWISCIE UZYWAMY METODY GETINITIALSTATE
 
 	W gwiazdach robimy warunek : kiedy zamknieta a kiedy otwarta
 	dodajemy indicator jako tablca do gwiazdek w state
