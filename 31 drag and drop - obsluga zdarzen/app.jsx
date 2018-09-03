@@ -1,8 +1,7 @@
 // 31 drag and drop - obluga zdarzen 
 
-/* 
-	Rozwiążemy penien problem ze STANEM który pojawia się opdczas ukrywania i odkrywania
-	elemtnów na stronie 
+/* NA RAZIE NIE WIADOMO CO Z RĄZWIĄZANIEM RATINGU
+	WYkorzytamy bardziej skomplikowane zdarzenia typu drag and drop - wykorzystanie HTML5Ks
 */
 
 var AppState = new StateStore();
@@ -62,5 +61,7 @@ const actions = AppState.createActions({
 ReactDOM.render(<App store={AppState} actions={actions} />, document.getElementById('root'));
 
 /* 
+	- dodanie Nav do osobnego pliku
+	- dodajemy Komponenty Dropppable i Draggable
 
 */ 
