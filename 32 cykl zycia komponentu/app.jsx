@@ -1,5 +1,5 @@
 
-var AppState = new StateStore();
+const AppState = new StateStore();
 
 AppState.setState({
 	page: 1,
@@ -17,8 +17,9 @@ AppState.setState({
 	cart_list: [],
 	cart_map: {},
 
-	activeTab: "Kursy",
+	activeTab: 'Kursy',
 })
+
 
 const actions = AppState.createActions({
 	loadMore: function(event){
@@ -37,20 +38,19 @@ const actions = AppState.createActions({
 		if(index !== -1)
 		this.favourites_list.splice(index,1)
 	},
-	// << 8 >> 
 	addToCart: function(id){
 		if(!this.cart_map[id]){
 			this.cart_map[id] = 1;
 			this.cart_list.push(this.courses_map[id])
-		} else {
+		}else{
 			this.cart_map[id]++
 		}
 	},
 	removeFromCart: function(id){
-		this.cart_map[id] === 0 ? 0 : this.cart_map[id]--;
+		this.cart_map[id] === 0? 0 : this.cart_map[id]--;
 		if(!this.cart_map[id]){
-			let index = this.cart_list.findIndex( (c) => c.id === id )
-			if(index!== -1)
+			let index = this.cart_list.findIndex((c)=>c.id === id)
+			if(index !== -1)
 			this.cart_list.splice(index,1)
 		}
 	},
@@ -61,5 +61,4 @@ const actions = AppState.createActions({
 
 
 ReactDOM.render(<App store={AppState} actions={actions} />, document.getElementById('root'));
-
 

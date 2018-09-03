@@ -41,8 +41,8 @@ const Nav = (props) => {
 								<Tab name="Koszyk">
 								<a href="#">
 								{/* << 2 >> /> */}
-								<Droppable onDrop={ (data) => actions.addToCart(data) } >
-									<span className="glyphicon glyphicon-shopping-cart"></span>Koszyk
+								<Droppable onDrop={ (data) => actions.addToCart(data) } >					{/* << 7 >> /> */}
+									<span className="glyphicon glyphicon-shopping-cart"></span>Koszyk {AppState.state.cart_list.length} 
 								</Droppable>
 								</a>
 								</Tab>

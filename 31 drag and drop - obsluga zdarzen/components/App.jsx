@@ -1,37 +1,8 @@
+// 31 drag and drop - obluga zdarzen 
 
-// << 1 >> 
-const Draggable = (props) => {
-
-	function onDragStart(e){
-		console.log(e);
-// << 6 >>
-		if(props.image){
-			let img = new Image();
-			img.src = props.image;
-			e.dataTransfer.setDragImage(img,10,10)
-		}
-
-		e.dataTransfer.setData("application/x-edukursy-kurs", props.data.id)
-	}
-
-	return <div draggable="true" onDragStart={onDragStart}>{ props.children} </div>
-}
-
-const Droppable = (props) => {
-
-	function onDragOver(e){
-		e.preventDefault()
-	}
-	// << 3 >>
-	function onDrop(e){
-		// console.log( e.dataTransfer.getData("application/x-edukursy-kurs") )
-		let data = e.dataTransfer.getData("application/x-edukursy-kurs");
-		props.onDrop(data, e)
-	}
-
-	return <div onDragOver={onDragOver} onDrop={onDrop}>{ props.children} </div>
-}
-
+/* NA RAZIE NIE WIADOMO CO Z RĄZWIĄZANIEM RATINGU
+	WYkorzytamy bardziej skomplikowane zdarzenia typu drag and drop - wykorzystanie HTML5Ks
+*/
 
 
 const App = React.createClass({
@@ -180,16 +151,46 @@ const App = React.createClass({
 		
 		DZIĘKI TEMU TO CO BĘDZIEMY SOBIE PRZENOSCIĆ, OBOK KURSORA BĘDZIE MIAŁO WŁAŚNIE TEN OBRAZEK !!!! - działa !
 
+		<< 7 >> 
+		Dodajemy jeszcze w Nav.jsx widok ile obecnie mamy rzeczy w koszyku
+
+		<< 8 >> 
+		Jeszcze jedna rzecz, on poustawial ze mozna kilka takich samych kursow dodac do koszyka,
+		ale chujowo to zrobil bo nie zwieksza sie wtedy liczba prodoktow, powiedzial ze jeszcze to dorobi
+		Zmieniamy to w app.jsx :
+				addToCart: function(id){
+					this.cart_map[id] = true;
+					this.cart_list.push(this.courses_map[id])
+				},
+				removeFromCart: function(id){
+					this.cart_map[id] = false;
+					let index = this.cart_list.findIndex( (c) => c.id === id )
+					if(index!== -1)
+						this.cart_list.splice(index,1)
+				},
+		Na to:
+			addToCart: function(id){
+				if(!this.cart_map[id]){
+					this.cart_map[id] = 1;
+					this.cart_list.push(this.courses_map[id])
+				} else {
+					this.cart_map[id]++
+				}
+			},
+			removeFromCart: function(id){
+				this.cart_map[id] === 0 ? 0 : this.cart_map[id]--;
+				if(!this.cart_map[id]){
+					let index = this.cart_list.findIndex( (c) => c.id === id )
+					if(index!== -1)
+					this.cart_list.splice(index,1)
+				}
+			},		
+
+		Całkiem nieźle on to rozwiązał, więc można sobie póścić ostatnie minuty tej lekcji jeśli chcesz to rozkminic
+
+		PRZENOSIMY NASZE DRAG END DROP TO INNEGO PLIKU !!! więc uwazaj na numerki << >>
 		
-
-
-
-	
-
-
-
-
-
-
-
+		ZATEM WIDZISZ ZE DZIĘKI NIESTANDARDOWYM ZDARZENIOM i instenijacych elementow HTML mozesz robic tutaj dokladnie to
+		co robiles przy uzyciu zwyklego JS lub jQuery, MAJĄĆ PONAD TO całe udogodnienia REACTA w postaci jednolitego STANU i
+		autonomicznych komponentów
 */ 
