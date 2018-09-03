@@ -38,7 +38,14 @@ const Nav = (props) => {
 								<Tab name="Ulubione"></Tab>
 					</TabsNav>
 					<TabsNav className="nav navbar-nav navbar-right" onChange={props.onChange} activeTab={props.activeTab}>
-								<Tab name="Koszyk"><a href="#"><span className="glyphicon glyphicon-shopping-cart"></span>Koszyk</a></Tab>
+								<Tab name="Koszyk">
+								<a href="#">
+								{/* << 2 >> /> */}
+								<Droppable onDrop={ (data) => actions.addToCart(data) } >
+									<span className="glyphicon glyphicon-shopping-cart"></span>Koszyk
+								</Droppable>
+								</a>
+								</Tab>
 					</TabsNav>
 			</div>
 	</nav>

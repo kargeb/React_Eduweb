@@ -60,8 +60,4 @@ const actions = AppState.createActions({
 
 ReactDOM.render(<App store={AppState} actions={actions} />, document.getElementById('root'));
 
-/* 
-	- dodanie Nav do osobnego pliku
-	- dodajemy Komponenty Dropppable i Draggable
 
-*/ 
