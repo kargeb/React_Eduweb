@@ -231,7 +231,7 @@ ReactDOM.render( <div>
         Zamiast:
          {list.map((data) => <Course data={data} key={data.id}>
          To:
-          {list.map((data) => <Course data={data} key={data.id}>
+         {list.map((data) => <Course data={data} key={data.id} Details={CartDetails}>
     
     WSZYSTKO PIĘKNIE GRA ! 
     << 12 >>    Ostatnie co robimy to zmiana "in_cart" w CoursesList na FALSE 
