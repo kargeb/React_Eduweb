@@ -86,7 +86,30 @@ const CoursesEditor = React.createClass({
 	}
 })
 
-const CourseForm = React.createClass({
+const CourseForm = React.createClass({		// w chuj wazne rzecy, 13 minuta, jednokierunowy przeplyw !!!
+
+	getInitialState: function(){
+		return {
+			// title: this.props.course.title
+			course: this.props.course
+		}
+	},
+
+	componentWillReceiveProps: function(nextProps){
+		this.setState({
+			course: nextProps.course
+		})
+	},
+
+	changedTitle: function(e){
+
+		let course = this.state.course;
+		course.title = e.target.value;
+
+		this.setState({
+			course: course
+		})
+	},
 
 	render: function(){
 		return <div>
@@ -94,7 +117,7 @@ const CourseForm = React.createClass({
 				<div className="form-group">
 					<label className="control-label">Nazwa kursu</label>
 					<div>
-						<input type="text" className="form-control"/>
+						<input type="text" className="form-control" value={ this.state.course.title } onChange={ this.changedTitle }/>
 					</div>
 				</div>
 			</form>
@@ -177,7 +200,6 @@ const App = React.createClass({
 		ZBINDOWANA Z TYM KURSEM
 			onClick={ () => this.props.onSelect(course)}
 
-
-
+	-- OD 13 minuty w chuj wazne rzeczy mowi, trzeba to zanotowac ------
 
 */ 
