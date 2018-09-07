@@ -1,8 +1,63 @@
-// 31 drag and drop - obluga zdarzen 
+// 33 syntetyczny obiekt zarzenia - wyszukiwarka
 
-/* NA RAZIE NIE WIADOMO CO Z RĄZWIĄZANIEM RATINGU
-	WYkorzytamy bardziej skomplikowane zdarzenia typu drag and drop - wykorzystanie HTML5Ks
+/*
+	Zapamiątaj że w Reackt przeplyw danych jest z rogoly JEDNOKIERUNKOWY
+	czyli idzie ZE ZRODLA DANYCH DO WIDOKU
+	Zanim przejdziemy do zaawansowanych rzeczy na początek zrobimy prostą
+	wyszukiwarke kursów.
+
 */
+
+const CourseSearch = React.createClass({
+
+	getInitialState: function(){
+		return {
+			"query": "",
+			"filtered_list": []
+		}
+	},
+
+	filterList: function(event){
+
+		event.persist();
+
+		console.log(event);
+
+		clearTimeout(this.pending);
+
+		this.pending = setTimeout(() => {
+			let query = event.target.value;
+
+			this.setState({
+				filtered_list: this.props.courses.filter((course) => (
+					query.length >= 3 &&
+					(course.title.toLowerCase().includes((query).toLowerCase())
+						|| course.description.toLowerCase().includes((query).toLowerCase())
+						|| course.author.toLowerCase().includes((query).toLowerCase())
+					)
+				))
+			})
+		}, 500)
+	},
+
+	render: function () {
+		return (
+			<div>
+				<input type="text" className="form-control" onChange={ this.filterList } placeholder="Filtruj listę kursów" />
+				<hr />
+				<div className="list-group">
+					{/* {this.props.courses.map((course) => ( */}
+					{ this.state.filtered_list.map( (course) => (
+						<a href="#" key={course.id} className="list-group-item">
+							<h4 className="list-group-item-heading"> {course.title} </h4>
+							<p className="list-group-item-text"> {course.author} </p>
+						</a>
+					))}
+				</div>
+			</div>
+		)
+	}
+})
 
 
 const App = React.createClass({
@@ -31,15 +86,15 @@ const App = React.createClass({
 
 					<div className="row">
 					<div className="col-xs-12">
-						{/* << 1 >> */}
-						{/* <Draggable>Przeciągnij mnie</Draggable> */}
-						{/* <Droppable>Upuść tutaj</Droppable> */}
-
 					</div>
 					</div>
 					<div className="row">
 						<div className="col-xs-12">
 							<Tabs activeTab={this.state.activeTab}>
+								<TabPanel name="Wyszukiwarka">
+									<h1>Wyszukiwarka</h1>
+									<CourseSearch courses={ this.state.courses_source } ></CourseSearch>
+								</TabPanel>
 								<TabPanel name="Koszyk">
 									<ShoppingCartList list={this.state.cart_list} />
 								</TabPanel>
@@ -67,130 +122,68 @@ const App = React.createClass({
 })
 
 /* 
-	- dodanie Nav do osobnego pliku
-	- << 1 >> dodajemy Komponenty Dropppable i Draggable
-	- dzięki HTML5 bez zadnych bibliotek mozemy przeciągać elementy i korzystac ze związancyh z tym zdarzen
-	- Dopóki w komponentach nie umiescilismy zadnych atrybutów, mozna ich zawartosc (tekst) na stronie
-	zaznaczyc jak kazdy inny. ALE oznaczamy obiekt jako "draggable" i od teraz nie mozemy zaznaczyc tekstu, ale 
-	klikajac na niego mozemy go przeniesc co sugeruje jego poswiata pod kursore.
+	dodajemy TabPanel "wyszukiwarka". zmieniamy tez zeby to ta karta pokazywala sie domyslnie jako pierwsza 
+	- tworzymy mkomopnent CouerseSearch i przekazujemy tam WSZYSTKIE kursy z bazy
+	- robimy to z bootsrapem i oczyweiscie korzystajac z "map"
+	- tworzymy wyszukiwarke i zastanawiamy sie jakie zdarzee urzyc do rozpoczecia wyszukiwania,
+		no bo chcemy zrobic tak zeby nie zaczynalo szukac po kliknieciu jakiegos przycisku,
+		tylko zeby robilo to z automatu juz podczas wprowadzania tekstu
+		onKeyUp nie będzie do konca dobre bo NIE DZIALA JAK KTOS COS KOPIUJE LUB UZYWA T9 na komorce!
+		onInput z koleji NIE JEST WSZEDZIE WSPIERANY
+		KORZYSTAMY WIEC Z REACTOWEGO ZDARZENIA ktory po prostu nasluchuje zmian na elementach
+		CZYLI onChange !!!
+		I chuj z tego ze juz wykorzystalismy go w ciul razy ale dopiero teraz kuwra mowi co to w ogole jest ...
+		OTO JAK GO MOZNA ZAJEBISCIE PRZEETSTOWAC:
+			onChange={ (e)=>console.log(e.target.value) }
+		Bardzo wazne jest to ze on doskonale dziala nawet jak sie cos wkleja do rpzegladarki
 
-	Mamy teraz do dysapozycji wlasnie nowe zdarzenia i implementujemy pierwsze: W ELEMENCIE DRAGGABLE
-		onDragStart  z consollogiem pojawiajacym sie w momencie przenoszenia obiektu
-	Pod kursorem podczas przenosszenia MAMY ZNAK ZAKAZU POSTOJU (:P) co oznacza ze nic nie da upuszczenie go w danym miejscu.
-
-	Teraz w elemecie DROPPABLE robimy dwa zdarzenia:
-		onDragOver - odpala sie gdy PRZECIAGANY element znajduje sie nad nim
-		onDrop - gdy przeciagany elemnt wpada do niego
-
-	UWAGA sam fakt ze robimy cos w zdarzeniu "onDragOver" nie sprawia ze przegladarka juz pozwala tam cos puszczac,
-	TRZEBA DO JASNO POWIEDZIEC POPRZEZ BLOKOWANIE DOMYSLNEJ OPCJI PRZEGLĄDARKI A WIĘC:
-				function onDragOver(e){
-					e.preventDefault()
-				}
-
-	UWAGA! PRZESYLANIE INFORMACJI MIEDZY ELEMENTAMI DRAG AND DROP !!!
-		aby takie elementy mogly sie komunikowac ze soba TRZEAB SKRZYSTAC ZE SPECJALNEJ WLASCITOWSCI eventu:
+		W funkcji render jedyne co zmieniamy to to:
 		
-		W DRAGGABLE:
-			e.dataTransfer.setData("application/x-edukursy-kurs", "Kurs id=0")
+		Robimy nowey setInitialState:
+			
+		Robimy zdarzenie filterList i tutaj się dzieje magia!!!
 
-			"dataTransfer" to wlasnie specjalne API (chyba html5) i ustawiamy pierwszy argument set data 
-			na to CO SIE MA TAM ZNAJDOWAC, my robimy niestandardowa wartosc wiec nadajemy WLASNA NAZWE,
-			a w argumencie drugim CO CHCEMY PRZESLAC pod ta nazwa wlasnie
+			filterList: function(event){
 
-		W DROPPABLE:
-			po prostu odbieramy sobie ten komunikat wpisując zamiast SET to getData
-				function onDrop(e){
-					console.log( e.dataTransfer.getData("application/x-edukursy-kurs") )
-				}
-		<< 2 >>
-		wycinamy stad i umieszczamy droppable w koszyku w Nav.jsx	
-			<Droppable onDrop={ (data) => actions.addToCart(data) } >	
-		Robimy od razu osbluge zdarzenia onDrop (dalej kurwa nie wiem czemu tutaj ...)
+				event.persist();
+				clearTimeout(this.pending);
 
-		<< 3 >>
-		A to wydarzenie onDrop deklarujemy w tym pliku w DROPPABLE
-				
+				this.pending = setTimeout(() => {
+					let query = event.target.value;
 
-		<< 4 >> z koleji DRAGGABLE umieszczamy w "CoursesList.jsx" , I ŁADUJEMY TAM CAŁY KURS !!!
-			{list.map((data) => 
-
-					<Draggable data={data} key={data.id} image={data.image} >
-						<Course data={data}  Details={CourseDetails}>
-							<CoursePromoLabel data={data} />
-							<div className="btn-group pull-right">
-								<Button label="Szczególy kursu" />
-								<FavButton active={AppState.state.favourites_map[data.id]} 
-									onActivate={()=>actions.addFavourite(data.id)} 
-									onDeactivate={()=>actions.removeFavourite(data.id)}  />
-							</div>
-						</Course>
-					</Draggable>
-			)}
-
-		UWAGA ! przenosimy 	key={data.id} z <Course .. do <Draggable... zeby przegladarka nie pierdolila
-
-		<< 5 >> 			
-		TUTAJ JEST PETARDA !	
-		Zauwaz ze pod w << 4 >> w DRAGGABLE przesylamy image={data.image} ktore jest adresem obrazka,
-		ODBIERAMY TO W DRAGGABLE TUTAJ:
-		<< 6 >> 
-				if(props.image){
-					let img = new Image();
-					img.src = props.image;
-					e.dataTransfer.setDragImage(img,10,10)
-				}
-
-		I piewrszej lini tworzymy zmienna do obrazka uzywjac KONSTRUKTORA JS Image()
-		pozniej przypisujemy mu nasze zrodlo czyli link
-		I UMIESZCZAMY W SPECALNEJ WLASCIWOSCI TEGO API dataTransfer !!!
-		Podając wlasnie obrazek (adres) I JEGO WYMIARY !!!
-
-		No i jeszcze PODMIENIAMY DRUGI ARGUMENT NASZEGO seData:
-			e.dataTransfer.setData("application/x-edukursy-kurs", props.data.id)
-		
-		DZIĘKI TEMU TO CO BĘDZIEMY SOBIE PRZENOSCIĆ, OBOK KURSORA BĘDZIE MIAŁO WŁAŚNIE TEN OBRAZEK !!!! - działa !
-
-		<< 7 >> 
-		Dodajemy jeszcze w Nav.jsx widok ile obecnie mamy rzeczy w koszyku
-
-		<< 8 >> 
-		Jeszcze jedna rzecz, on poustawial ze mozna kilka takich samych kursow dodac do koszyka,
-		ale chujowo to zrobil bo nie zwieksza sie wtedy liczba prodoktow, powiedzial ze jeszcze to dorobi
-		Zmieniamy to w app.jsx :
-				addToCart: function(id){
-					this.cart_map[id] = true;
-					this.cart_list.push(this.courses_map[id])
-				},
-				removeFromCart: function(id){
-					this.cart_map[id] = false;
-					let index = this.cart_list.findIndex( (c) => c.id === id )
-					if(index!== -1)
-						this.cart_list.splice(index,1)
-				},
-		Na to:
-			addToCart: function(id){
-				if(!this.cart_map[id]){
-					this.cart_map[id] = 1;
-					this.cart_list.push(this.courses_map[id])
-				} else {
-					this.cart_map[id]++
-				}
+					this.setState({
+						filtered_list: this.props.courses.filter((course) => (
+							query.length >= 3 &&
+							(course.title.toLowerCase().includes((query).toLowerCase())
+								|| course.description.toLowerCase().includes((query).toLowerCase())
+								|| course.author.toLowerCase().includes((query).toLowerCase())
+							)
+						))
+					})
+				}, 500)
 			},
-			removeFromCart: function(id){
-				this.cart_map[id] === 0 ? 0 : this.cart_map[id]--;
-				if(!this.cart_map[id]){
-					let index = this.cart_list.findIndex( (c) => c.id === id )
-					if(index!== -1)
-					this.cart_list.splice(index,1)
-				}
-			},		
 
-		Całkiem nieźle on to rozwiązał, więc można sobie póścić ostatnie minuty tej lekcji jeśli chcesz to rozkminic
+		Wszystko co się dzieje w tym zdrazeniu DZIEJE SIE PO WPISANIU KAZDEJ LITRY W WYSZUKIWARKE
+		- W funkcji FILTER szukamy dopiero wyzej 3 ZNAKOW ORAZ sprawdzamy zarowno title jak i descryption jak i author
+		- SETTIMEOUT robimy po to zeby NIE ZAJEBAC SEWRERA 100 pytaniami na raz, tylko wysylamy zapaytania
+			po 500 MILISEKUNDACH od OSTATNIEGO wywolania tej funkcji
+			DZIEJE SIE TO DZIEKI TEMU ze zaraz na jej poczatku CZYSCIMI POPRZEDNI HANDLER setTimout	clearTimeout(this.pending);
 
-		PRZENOSIMY NASZE DRAG END DROP TO INNEGO PLIKU !!! więc uwazaj na numerki << >>
-		
-		ZATEM WIDZISZ ZE DZIĘKI NIESTANDARDOWYM ZDARZENIOM i instenijacych elementow HTML mozesz robic tutaj dokladnie to
-		co robiles przy uzyciu zwyklego JS lub jQuery, MAJĄĆ PONAD TO całe udogodnienia REACTA w postaci jednolitego STANU i
-		autonomicznych komponentów
+		UWAGA ! TUTAJ JEST CHYBA NAJWAZNIEJSZA RZECZ
+		Jak nasze kolejne zapyatnie przekroczy te 500 ms NO TO zostaje skasowane wiadomo, I WTEDY REACT SIE WKURWIA !!
+		No bo on wszystkie EVENTY ktory sie zakonczyly KASUJE sobie a my sie do niego odwolujemy w  clearTimeout !!
+		Otrzymujemy taki blad:	
+
+		react.js:20209 Warning: This synthetic event is reused for performance reasons. 
+		If you're seeing this, you're accessing the property `target` on a released/nullified synthetic event. 
+		This is set to null. If you must keep the original synthetic event around, use event.persist().			
+	 	
+		I robimy to co wlasnie tam pisze, czyli dodajemy jedną liniję jeszcze przed clearTimeout
+			event.persist();
+		KTORA MOWI REACTOWI ZEBY PRZETRZYMAL TO ZDARZENIE !!!
+		 persist - utzrymywac się, nie ustępować
+
+		 Mozna sobie jeszcze w consol.loga wpisac EVENT i zoabczyc ze nie jest to zwykle zapytanie ale
+		 zapytanie PROXY ktore sie nazywa SYNTETYCZNE chuj wie czemu
+
 */ 
