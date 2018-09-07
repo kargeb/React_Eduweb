@@ -1,7 +1,7 @@
 // 34 formularze kontrolowane
 
 /*
-
+	Robimy tak ze po wyszukaniu kursu, mozemy sobie w nim zmienic dowolną wartosc GLOBALNIE
 */
 
 const CourseSearch = React.createClass({
@@ -44,7 +44,8 @@ const CourseSearch = React.createClass({
 				<div className="list-group">
 					{/* {this.props.courses.map((course) => ( */}
 					{ this.state.filtered_list.map( (course) => (
-						<a href="#" key={course.id} className="list-group-item">
+						<a href="#" key={course.id} className={ "list-group-item" + (this.props.selected === course ? " active" : "" ) } 
+							onClick={ () =>  this.props.onSelect(course) }>
 							<h4 className="list-group-item-heading"> {course.title} </h4>
 							<p className="list-group-item-text"> {course.author} </p>
 						</a>
@@ -55,6 +56,51 @@ const CourseSearch = React.createClass({
 	}
 })
 
+const CoursesEditor = React.createClass({
+
+	getInitialState: function(){
+		return {
+			selected: null
+		}
+	},
+
+	select: function(course){	// TO NAM MOWI KTORY ELEMENT JEST OBECNIE ZAZNACZONY !!!
+		this.setState({
+			selected : course
+		})
+	},
+
+	render: function(){
+		return <div>
+			<div className= { this.state.selected ? "col-xs-4" : "col-xs-12" }>
+				<h1>Edytor Kursów</h1>
+				<hr/>
+				<CourseSearch courses={ this.props.courses} onSelect={ this.select } selected={ this.state.selected } ></CourseSearch>
+			</div>
+			{ this.state.selected ? 
+			<div className="col-xs-8">
+				{/* { this.state.selected.title } */}
+				<CourseForm course={ this.state.selected }></CourseForm>
+			</div> : null }
+		</div>
+	}
+})
+
+const CourseForm = React.createClass({
+
+	render: function(){
+		return <div>
+			<form>
+				<div className="form-group">
+					<label className="control-label">Nazwa kursu</label>
+					<div>
+						<input type="text" className="form-control"/>
+					</div>
+				</div>
+			</form>
+		</div>
+	}
+})
 
 const App = React.createClass({
 
@@ -88,8 +134,7 @@ const App = React.createClass({
 						<div className="col-xs-12">
 							<Tabs activeTab={this.state.activeTab}>
 								<TabPanel name="Wyszukiwarka">
-									<h1>Wyszukiwarka</h1>
-									<CourseSearch courses={ this.state.courses_source } ></CourseSearch>
+									<CoursesEditor courses={ this.state.courses_source } ></CoursesEditor>
 								</TabPanel>
 								<TabPanel name="Koszyk">
 									<ShoppingCartList list={this.state.cart_list} />
@@ -118,5 +163,21 @@ const App = React.createClass({
 })
 
 /* 
+	- zmieniamy CoutresSearch na CoursesEditor a CourseSerach do niego dajemy do srodka
+	- robimy zdarzenie onSelect 
+			<CourseSearch courses={ this.props.courses} onSelect={}></CourseSearch>
+		ktore ląduje w 
+			<a href="#" key={course.id} className="list-group-item" onClick={this.props.onSelect}>
+		
+	Czyli (chyba) w onSelect{} przekazujemy callbacka ktorego wywowłamy w onClick{}
+	
+	CYTUJĄC GO:
+		Ale tutaj 	onClick={this.props.onSelect}	Nie chcemy tutaj przekazac eventu klikniecia, 
+		tylko podpiac juz wlasciwy kurs, czyli mysimy wstawic fukncje ABY BYLA ONA SPIETA, 
+		ZBINDOWANA Z TYM KURSEM
+			onClick={ () => this.props.onSelect(course)}
+
+
+
 
 */ 
