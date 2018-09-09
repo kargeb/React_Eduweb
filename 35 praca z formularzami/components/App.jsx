@@ -1,7 +1,7 @@
-// 34 formularze kontrolowane
+// 35 praca z formularzami
 
 /*
-	Robimy tak ze po wyszukaniu kursu, mozemy sobie w nim zmienic dowolną wartosc GLOBALNIE
+	
 */
 
 const CourseSearch = React.createClass({
@@ -42,7 +42,6 @@ const CourseSearch = React.createClass({
 				<input type="text" className="form-control" onChange={ this.filterList } placeholder="Filtruj listę kursów" />
 				<hr />
 				<div className="list-group">
-					{/* {this.props.courses.map((course) => ( */}
 					{ this.state.filtered_list.map( (course) => (
 						<a href="#" key={course.id} className={ "list-group-item" + (this.props.selected === course ? " active" : "" ) } 
 							onClick={ () =>  this.props.onSelect(course) }>
@@ -64,7 +63,7 @@ const CoursesEditor = React.createClass({
 		}
 	},
 
-	select: function(course){	// TO NAM MOWI KTORY ELEMENT JEST OBECNIE ZAZNACZONY !!!
+	select: function(course){	
 		this.setState({
 			selected : course
 		})
@@ -79,18 +78,17 @@ const CoursesEditor = React.createClass({
 			</div>
 			{ this.state.selected ? 
 			<div className="col-xs-8">
-				{/* { this.state.selected.title } */}
+		
 				<CourseForm course={ this.state.selected }></CourseForm>
 			</div> : null }
 		</div>
 	}
 })
 
-const CourseForm = React.createClass({		// w chuj wazne rzecy, 13 minuta, jednokierunowy przeplyw !!!
+const CourseForm = React.createClass({		
 
 	getInitialState: function(){
 		return {
-			// title: this.props.course.title
 			course: this.props.course
 		}
 	},
@@ -116,7 +114,7 @@ const CourseForm = React.createClass({		// w chuj wazne rzecy, 13 minuta, jednok
 			<form>
 				<div className="form-group">
 					<label className="control-label">Nazwa kursu</label>
-					<div>											{/* << 1 >>  value = {this.props.course.title} */}
+					<div>			
 						<input type="text" className="form-control" value={ this.state.course.title } onChange={ this.changedTitle }/>
 					</div>
 				</div>
@@ -146,7 +144,7 @@ const App = React.createClass({
 		return (
 			<div>
 				<div className="container">
-					<h3>Lekcja 34 formularze kontrolowane</h3>
+					<h3>Lekcja 35 praca z formularzami</h3>
 					<Nav onChange={actions.navigateTo} activeTab={this.state.activeTab}></Nav>
 
 					<div className="row">
@@ -186,74 +184,5 @@ const App = React.createClass({
 })
 
 /* 
-	- zmieniamy CoutresSearch na CoursesEditor a CourseSerach do niego dajemy do srodka
-	- robimy zdarzenie onSelect 
-			<CourseSearch courses={ this.props.courses} onSelect={}></CourseSearch>
-		ktore ląduje w 
-			<a href="#" key={course.id} className="list-group-item" onClick={this.props.onSelect}>
-		
-	Czyli (chyba) w onSelect{} przekazujemy callbacka ktorego wywowłamy w onClick{}
 	
-	CYTUJĄC GO:
-		Ale tutaj 	onClick={this.props.onSelect}	Nie chcemy tutaj przekazac eventu klikniecia, 
-		tylko podpiac juz wlasciwy kurs, czyli mysimy wstawic fukncje ABY BYLA ONA SPIETA, 
-		ZBINDOWANA Z TYM KURSEM
-			onClick={ () => this.props.onSelect(course)}
-
-	-- OD 13 minuty w chuj wazne rzeczy mowi, trzeba to zanotowac ------
-<< 1 >>
-	OGÓLNIE CHODZI O TO REACT MUSI WIEDZIEC O KAZDEJ ZMIANIE W FORMULARZU i nie mozemy sobie 
-	tak po prostu wstawic sobie czrgos w INPUTA (z poziomu kodu)
-
-		render: function(){
-			return <div>
-				<form>
-					<div className="form-group">
-						<label className="control-label">Nazwa kursu</label>
-						<div>							
-						<input type="text" className="form-control" value={ this.props.course.title }/>
-						</div>
-					</div>
-				</form>
-			</div>
-		}
-
-	Tutaj u góry wlasnie cos takiego zachodzi  	value={ this.props.course.title }  
-	zmieniamy sobie wartosc inputa NIE MOWIAC O TYM REACTOWI
-	ZABURZONY JEST JENDOKIERUNKOWY PRZEPLYW INFORMACJI !!!
-
-	Dlatego dorabiamy zdarzeni onChange 
-	<input type="text" className="form-control" value={ this.state.course.title } onChange={ this.changedTitle }/>
-
-		changedTitle: function(e){
-			let course = this.state.course;
-			course.title = e.target.value;
-			this.setState({
-				course: course
-			})
-		},
-
-	Gdzie zmieniamy sobie ten tytul ALE ZE STANU REACTOWEGO czyli w funckji setState i za pomosa zmiennej stanowej !!
-	No i wlasnie zeby to zadzialalo TO MUSIMY USTAWIC TA ZMIENNA STANOWA !!!
-	
-		getInitialState: function(){
-		return {
-				// title: this.props.course.title
-				course: this.props.course
-			}
-		},
-
-	No i teraz juz mamy nasze THIS.STATE.COURSE !!!
-	i wszysto juz dziala zgodznie z jednokierunokwym ruchem !
-	
-	pozostaje dolaczneie metody ktora synchronizuje nasz komopnent czyli :
-		componentWillReceiveProps: function(nextProps){
-			this.setState({
-				course: nextProps.course
-			})
-		},
-
-	BEZ TEJ LIJNIJKI WYZEJ W OGOOLE NIE UAKTUALNIA NAM SIE wstawianie w inputa innych kursow po kliknieciu
-	w nie !!!
-	Czyli kurwa dalej tego nie czaje	
 */ 
