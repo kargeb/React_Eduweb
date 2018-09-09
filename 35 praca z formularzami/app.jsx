@@ -27,6 +27,17 @@ const actions = AppState.createActions({
 		this.page = page,
 		this.courses_list = this.courses_source.slice(0, this.page * 3)
 	},
+	saveCourse: function(course){
+		let id = course.id;
+		if("undefined" === typeof id){
+			id = course.id = new Date();
+			this.courses_source.push(course);
+			this.courses_map[id] = course;
+			this.courses_list.unshift(course);
+		} else {
+			Object.assign(this.courses_map[id], course)
+		}
+	},
 	addFavourite: function(id){
 		this.favourites_map[id] = true;
 		this.favourites_list.push(this.courses_map[id])
